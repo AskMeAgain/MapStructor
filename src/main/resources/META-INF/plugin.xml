@@ -13,4 +13,8 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.java</depends>
 
+    <actions>
+        <action id="io.github.askmeagain.mapstructor.services.MapstructorAction"
+                class="io.github.askmeagain.mapstructor.services.MapstructorAction" text="Mapstructor"/>
+    </actions>
 </idea-plugin>
