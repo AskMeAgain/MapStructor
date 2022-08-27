@@ -25,13 +25,14 @@ public class Extractor {
         newMap.put(prefix1, new ArrayList<>());
         newMap.get(prefix1).add(Mapping.of(child));
       } else if (child instanceof PsiReturnStatement) {
-        newMap.put("return", new ArrayList<>());
-        newMap.get("return").add(Mapping.of(child));
+        newMap.get(prefix).add(Mapping.of(child));
       } else if (child instanceof PsiDeclarationStatement) {
         newMap.get(prefix).add(Mapping.of(child));
       } else if (child instanceof PsiJavaToken) {
         //do nothing
       } else if (child instanceof PsiTypeElement) {
+        //do nothing
+      } else if (child instanceof PsiKeyword) {
         //do nothing
       } else if (child instanceof PsiWhiteSpace) {
         //do nothing
@@ -39,7 +40,7 @@ public class Extractor {
         newMap.get(prefix).add(Mapping.done(child));
       } else if (child instanceof PsiReferenceExpression) {
         if(!child.getText().contains(".")){
-          newMap.get(prefix).add(Mapping.done(child));
+          //newMap.get(prefix).add(Mapping.done(child));
         } else if (child.getText().contains(".builder()")) {
           newMap.get(prefix).add(Mapping.done(child).withLombok(true));
         } else {
@@ -69,7 +70,10 @@ public class Extractor {
         } else {
           throw new NotImplementedException();
         }
-      } else {
+      }else if (child instanceof PsiNewExpression) {
+        //do nothing
+        int i = 0;
+      }  else {
         newMap.get(prefix).add(Mapping.done(child));
       }
     }

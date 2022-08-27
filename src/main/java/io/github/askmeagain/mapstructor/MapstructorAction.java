@@ -39,7 +39,7 @@ public class MapstructorAction extends AnAction {
       var printResult = new MapstructPrinter().returnMapstructTemplate(
           result.getMapperName(),
           result.getOutputType(),
-          Collections.emptyList()
+          result.getMappings()
       );
 
       WriteCommandAction.runWriteCommandAction(project, () -> {

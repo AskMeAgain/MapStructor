@@ -6,15 +6,9 @@ import lombok.Setter;
 
 @Data
 @Builder
-public class Output1 {
+public class Output2 {
 
-  String input1;
-  String input2;
-  String input3;
-  Input1 input4;
-
-  String input5;
-
-  Output2 nestedThings;
+  String nested1;
+  String nested2;
 
 }

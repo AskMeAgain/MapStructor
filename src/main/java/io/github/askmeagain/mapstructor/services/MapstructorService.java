@@ -1,14 +1,15 @@
 package io.github.askmeagain.mapstructor.services;
 
 import com.intellij.psi.PsiCodeBlock;
-import io.github.askmeagain.mapstructor.MapstructorAction;
+import com.intellij.psi.PsiType;
 import io.github.askmeagain.mapstructor.entities.Mapping;
 import io.github.askmeagain.mapstructor.entities.Result;
+import io.github.askmeagain.mapstructor.entities.ResultMapping;
+import io.github.askmeagain.mapstructor.entities.TargetSourcecontainer;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MapstructorService {
 
@@ -17,11 +18,49 @@ public class MapstructorService {
 
     var finalMapping = extracted(result);
 
+    var methodList = finalMapping.entrySet().stream()
+        .map(x -> ResultMapping.builder()
+            .target(x.getKey())
+            .source(x.getValue().get(0).getFrom().getText())
+            .build())
+        .collect(Collectors.groupingBy(x -> findGroupKey(x.getTarget())))
+        .entrySet()
+        .stream()
+        .map(method -> MappingMethods.builder()
+            .outputType(method.getKey())
+            .mappings(method.getValue().stream()
+                .map(y -> TargetSourcecontainer.builder()
+                    .source(getSource(y))
+                    .target(getTarget(y))
+                    .build())
+                .collect(Collectors.toList()))
+            .build())
+        .collect(Collectors.toList());
+
     return Result.builder()
         .mapperName("TODO")
-        .mappings(List.of("TODO"))
-        .outputType("TODO")
+        .mappings(methodList)
+        .outputType("Output1")
         .build();
+  }
+
+  private static String getTarget(ResultMapping y) {
+    if (y.getTarget().contains(".")) {
+      return y.getTarget().split("\\.")[1];
+    }
+    return y.getTarget();
+  }
+
+  private static String getSource(ResultMapping y) {
+    return "TODO";
+  }
+
+  @NotNull
+  private static String findGroupKey(String key) {
+    if (key.contains(".")) {
+      return key.substring(0, key.lastIndexOf("."));
+    }
+    return key;
   }
 
   public static Map<String, List<Mapping>> extracted(Map<String, List<Mapping>> input) {
