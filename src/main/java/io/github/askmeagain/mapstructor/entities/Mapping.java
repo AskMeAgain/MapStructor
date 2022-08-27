@@ -27,4 +27,9 @@ public class Mapping {
         .done(true)
         .build();
   }
+
+  @Override
+  public String toString(){
+    return from.getText();
+  }
 }

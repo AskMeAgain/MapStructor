@@ -7,15 +7,12 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.psi.impl.PsiJavaParserFacadeImpl;
 import groovy.util.logging.Slf4j;
-import io.github.askmeagain.mapstructor.entities.Mapping;
-import io.github.askmeagain.mapstructor.printer.MapstructPrinter;
-import io.github.askmeagain.mapstructor.services.Extractor;
+import io.github.askmeagain.mapstructor.printer.MapstructMapperPrinter;
 import io.github.askmeagain.mapstructor.services.MapstructorService;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
 
 @Slf4j
 public class MapstructorAction extends AnAction {
@@ -36,9 +33,8 @@ public class MapstructorAction extends AnAction {
 
       var result = new MapstructorService().calc(codeBlock);
 
-      var printResult = new MapstructPrinter().returnMapstructTemplate(
+      var printResult = new MapstructMapperPrinter().returnMapstructTemplate(
           result.getMapperName(),
-          result.getOutputType(),
           result.getMappings()
       );
 

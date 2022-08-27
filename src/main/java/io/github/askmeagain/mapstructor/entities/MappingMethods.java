@@ -1,8 +1,7 @@
-package io.github.askmeagain.mapstructor.services;
+package io.github.askmeagain.mapstructor.entities;
 
 import com.intellij.psi.PsiType;
-import io.github.askmeagain.mapstructor.entities.Mapping;
-import io.github.askmeagain.mapstructor.entities.TargetSourcecontainer;
+import io.github.askmeagain.mapstructor.entities.TargetSourceContainer;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
@@ -14,9 +13,9 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class MappingMethods {
 
-  List<TargetSourcecontainer> mappings;
+  List<TargetSourceContainer> mappings;
 
   @EqualsAndHashCode.Include
-  String outputType;
+  PsiType outputType;
 
 }
