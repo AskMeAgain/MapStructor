@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 
 public class MapstructorActionTest extends LightJavaCodeInsightFixtureTestCase {
 
+  private static final String MAPSTRUCTOR_ACTION = "io.github.askmeagain.mapstructor.MapstructorAction";
+
   @Override
   public final String getTestDataPath() {
     return System.getProperty("user.dir");
@@ -31,6 +33,23 @@ public class MapstructorActionTest extends LightJavaCodeInsightFixtureTestCase {
         "src/test/java/io/github/askmeagain/mapstructor/entities/Output1.java"
     );
 
-    myFixture.performEditorAction("io.github.askmeagain.mapstructor.services.MapstructorAction");
+    myFixture.performEditorAction(MAPSTRUCTOR_ACTION);
+  }
+
+  @Test
+  public void testSimpleStuff() {
+    myFixture.configureByFiles(
+        "src/test/resources/cases/simple/CaseSimple.java",
+        "src/test/java/io/github/askmeagain/mapstructor/entities/Input1.java",
+        "src/test/java/io/github/askmeagain/mapstructor/entities/Output1.java"
+    );
+
+    myFixture.performEditorAction(MAPSTRUCTOR_ACTION);
+    myFixture.checkResultByFile(
+        "src/test/resources/cases/simple/TODO.java",
+        "src/test/resources/cases/simple/expected.java",
+        false
+    );
+
   }
 }

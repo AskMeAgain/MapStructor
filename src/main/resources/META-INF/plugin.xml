@@ -14,7 +14,7 @@
     <depends>com.intellij.java</depends>
 
     <actions>
-        <action id="io.github.askmeagain.mapstructor.services.MapstructorAction"
-                class="io.github.askmeagain.mapstructor.services.MapstructorAction" text="Mapstructor"/>
+        <action id="io.github.askmeagain.mapstructor.MapstructorAction"
+                class="io.github.askmeagain.mapstructor.MapstructorAction" text="Mapstructor"/>
     </actions>
 </idea-plugin>

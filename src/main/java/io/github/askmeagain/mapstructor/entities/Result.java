@@ -9,6 +9,7 @@ import java.util.List;
 @Builder
 public class Result {
 
-  Mapping outputMapping;
-  List<Mapping> mappingList;
+  String mapperName;
+  String outputType;
+  List<String> mappings;
 }

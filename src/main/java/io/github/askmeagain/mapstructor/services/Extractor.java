@@ -9,12 +9,11 @@ import org.apache.commons.lang.NotImplementedException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @UtilityClass
 public class Extractor {
 
-  public static HashMap<String, List<Mapping>> extract(String prefix, Mapping element) {
+  public static HashMap<String, List<Mapping>> expandElement(String prefix, Mapping element) {
     var newMap = new HashMap<String, List<Mapping>>();
     newMap.put(prefix, new ArrayList<>());
 
@@ -39,7 +38,9 @@ public class Extractor {
       } else if (child instanceof PsiBinaryExpression) {
         newMap.get(prefix).add(Mapping.done(child));
       } else if (child instanceof PsiReferenceExpression) {
-        if (child.getText().contains(".builder()")) {
+        if(!child.getText().contains(".")){
+          newMap.get(prefix).add(Mapping.done(child));
+        } else if (child.getText().contains(".builder()")) {
           newMap.get(prefix).add(Mapping.done(child).withLombok(true));
         } else {
           var varName = PsiTreeUtil.findChildOfType(child, PsiIdentifier.class).getText();
