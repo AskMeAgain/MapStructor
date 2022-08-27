@@ -1,10 +1,9 @@
 package io.github.askmeagain.mapstructor.services;
 
 import com.intellij.psi.PsiCodeBlock;
+import io.github.askmeagain.mapstructor.entities.BasicMapping;
 import io.github.askmeagain.mapstructor.entities.CollectedResult;
 import io.github.askmeagain.mapstructor.entities.MappingMethods;
-import io.github.askmeagain.mapstructor.entities.TargetSourceContainer;
-import io.github.askmeagain.mapstructor.entities.V2Mapping;
 import io.github.askmeagain.mapstructor.visitor.MappingVisitor;
 
 import java.util.stream.Collectors;
@@ -16,17 +15,17 @@ public class MapstructorService {
     var straightMappingList = MappingVisitor.find(codeBlock);;
 
     var dividedByParent = straightMappingList.stream()
-        .collect(Collectors.groupingBy(V2Mapping::getParent));
+        .collect(Collectors.groupingBy(BasicMapping::getParent));
 
     var result = dividedByParent.entrySet()
         .stream()
-        .map(kv -> MappingMethods.builder()
-            .outputType(kv.getKey())
-            .mappings(kv.getValue()
+        .map(mappingByType -> MappingMethods.builder()
+            .outputType(mappingByType.getKey())
+            .mappings(mappingByType.getValue()
                 .stream()
-                .map(y -> TargetSourceContainer.builder()
-                    .target(y.getTarget())
-                    .source(y.getExpression())
+                .map(mapping -> MappingMethods.TargetSourceContainer.builder()
+                    .target(mapping.getTarget())
+                    .source(mapping.getExpression())
                     .build())
                 .collect(Collectors.toList()))
             .build())

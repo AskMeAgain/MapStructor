@@ -33,10 +33,7 @@ public class MapstructorAction extends AnAction {
 
       var result = new MapstructorService().calc(codeBlock);
 
-      var printResult = new MapstructMapperPrinter().returnMapstructTemplate(
-          result.getMapperName(),
-          result.getMappings()
-      );
+      var printResult = MapstructMapperPrinter.returnMapstructTemplate(result);
 
       WriteCommandAction.runWriteCommandAction(project, () -> {
         try {

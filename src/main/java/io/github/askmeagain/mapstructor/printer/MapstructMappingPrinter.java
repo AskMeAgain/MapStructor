@@ -2,14 +2,14 @@ package io.github.askmeagain.mapstructor.printer;
 
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.util.PsiTreeUtil;
-import io.github.askmeagain.mapstructor.entities.TargetSourceContainer;
+import io.github.askmeagain.mapstructor.entities.MappingMethods;
 import org.apache.commons.lang.StringUtils;
 
 public class MapstructMappingPrinter {
 
   public static String MAPSTRUCT_MAPPING_TEMPLATE = "  @Mapping(target = \"$TARGET_MAPPING\"$EXPRESSION$CONSTANT$SOURCE)";
 
-  public static String print(TargetSourceContainer mapping) {
+  public static String print(MappingMethods.TargetSourceContainer mapping) {
 
     var constant = PsiTreeUtil.getChildOfType(mapping.getSource(), PsiLiteralExpression.class);
 

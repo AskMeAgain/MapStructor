@@ -1,21 +1,24 @@
 package io.github.askmeagain.mapstructor.printer;
 
+import io.github.askmeagain.mapstructor.entities.CollectedResult;
 import io.github.askmeagain.mapstructor.entities.MappingMethods;
+import lombok.experimental.UtilityClass;
 
 import java.util.List;
 
+@UtilityClass
 public class MapstructMapperPrinter {
 
-  public static String MAPSTRUCT_TEMPLATE = "@Mapper\n" +
+  private static final String MAPSTRUCT_TEMPLATE = "@Mapper\n" +
       "public interface $MAPPER_NAME {\n" +
       "\n" +
       "$MAPPING_METHODS" +
       "\n" +
       "}";
 
-  public String returnMapstructTemplate(String mapperName, List<MappingMethods> mappingList) {
+  public static String returnMapstructTemplate(CollectedResult result) {
     return MAPSTRUCT_TEMPLATE
-        .replace("$MAPPER_NAME", mapperName)
-        .replace("$MAPPING_METHODS", MapstructMethodPrinter.print(mappingList));
+        .replace("$MAPPER_NAME", result.getMapperName())
+        .replace("$MAPPING_METHODS", MapstructMethodPrinter.print(result.getMappings()));
   }
 }

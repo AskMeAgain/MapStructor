@@ -4,7 +4,7 @@ import org.apache.commons.text.CaseUtils;
 
 import java.util.regex.Pattern;
 
-public class Utils {
+public class MapstructorUtils {
 
   public static boolean matchesRegex(String regex, String text) {
     var pattern = Pattern.compile(regex);

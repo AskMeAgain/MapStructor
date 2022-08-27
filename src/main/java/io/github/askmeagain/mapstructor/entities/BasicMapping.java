@@ -1,13 +1,16 @@
 package io.github.askmeagain.mapstructor.entities;
 
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiType;
 import lombok.Builder;
 import lombok.Value;
 
 @Value
 @Builder
-public class TargetSourceContainer {
+public class BasicMapping {
 
-  PsiElement source;
+  PsiType parent;
   String target;
+  PsiElement expression;
+
 }
