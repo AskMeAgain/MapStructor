@@ -1,6 +1,10 @@
 package io.github.askmeagain.mapstructor.printer;
 
+import com.intellij.psi.PsiReferenceExpression;
 import io.github.askmeagain.mapstructor.entities.MappingMethods;
+import io.github.askmeagain.mapstructor.entities.VariableWithName;
+import org.apache.tools.ant.types.Environment;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,7 +21,13 @@ public class MapstructMethodPrinter {
                 .map(MapstructMappingPrinter::print)
                 .collect(Collectors.joining("\n")))
             .replace("$OUTPUT_TYPE", method.getOutputType().getPresentableText())
-            .replace("$PARAMS", "TODOObject todoObject"))
+            .replace("$PARAMS", method.getInputs().stream()
+                .map(MapstructMethodPrinter::getInput)
+                .collect(Collectors.joining(", "))))
         .collect(Collectors.joining("\n"));
+  }
+
+  private static String getInput(VariableWithName variableWithName) {
+    return variableWithName.getType().getPresentableText() + " " + variableWithName.getName().getText();
   }
 }

@@ -22,6 +22,7 @@ public class MapstructorAction extends AnAction {
     var editor = e.getRequiredData(CommonDataKeys.EDITOR);
     var project = e.getRequiredData(CommonDataKeys.PROJECT);
     var data = e.getData(PlatformDataKeys.VIRTUAL_FILE);
+    var psiFile = e.getData(PlatformDataKeys.PSI_FILE);
 
     var psiJavaParserFacade = new PsiJavaParserFacadeImpl(project);
 
@@ -31,7 +32,7 @@ public class MapstructorAction extends AnAction {
 
       var codeBlock = psiJavaParserFacade.createCodeBlockFromText("{" + selectedText + "}", null);
 
-      var result = new MapstructorService().calc(codeBlock);
+      var result = new MapstructorService(psiFile).calc(codeBlock);
 
       var printResult = MapstructMapperPrinter.returnMapstructTemplate(result);
 

@@ -17,11 +17,14 @@ public class MapstructMappingPrinter {
     var hasConstant = constant != null;
     var hasExpression = false;
 
+    var stripLeft = StringUtils.strip(mapping.getSource().getText(), "(");
+    var stripRight = StringUtils.strip(stripLeft, ")");
+
     return MAPSTRUCT_MAPPING_TEMPLATE
-        .replace("$SOURCE", hasSource ? ",source = \"$SOURCE_MAPPING\"" : "")
+        .replace("$SOURCE", hasSource ? ", source = \"$SOURCE_MAPPING\"" : "")
         .replace("$EXPRESSION", hasExpression ? "" : "")
-        .replace("$CONSTANT", hasConstant ? ",constant = \"" + StringUtils.strip(constant.getText(), "\"") + "\"" : "")
+        .replace("$CONSTANT", hasConstant ? ", constant = \"" + StringUtils.strip(constant.getText(), "\"") + "\"" : "")
         .replace("$TARGET_MAPPING", mapping.getTarget())
-        .replace("$SOURCE_MAPPING", mapping.getSource().getText());
+        .replace("$SOURCE_MAPPING", stripRight);
   }
 }

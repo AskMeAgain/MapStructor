@@ -10,5 +10,8 @@ public class Output2 {
 
   String nested1;
   String nested2;
+  String outerVariable;
+
+  Output3 superNestedObject;
 
 }

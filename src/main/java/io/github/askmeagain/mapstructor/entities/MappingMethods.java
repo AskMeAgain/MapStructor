@@ -1,22 +1,27 @@
 package io.github.askmeagain.mapstructor.entities;
 
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiIdentifier;
+import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.psi.PsiType;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Value;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Value
+@Data
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class MappingMethods {
 
-  List<TargetSourceContainer> mappings;
+  private List<TargetSourceContainer> mappings;
 
   @EqualsAndHashCode.Include
-  PsiType outputType;
+  private PsiType outputType;
+
+  @With
+  @Builder.Default
+  private List<VariableWithName> inputs = new ArrayList<>();
 
   @Value
   @Builder
