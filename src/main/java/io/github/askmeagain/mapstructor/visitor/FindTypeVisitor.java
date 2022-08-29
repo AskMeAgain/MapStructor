@@ -29,4 +29,6 @@ public class FindTypeVisitor extends JavaRecursiveElementVisitor {
     element.accept(instance);
     return instance.getType();
   }
+
+
 }

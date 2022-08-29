@@ -9,6 +9,7 @@ import java.util.List;
 @Builder
 public class CollectedResult {
 
+  String packageName;
   String mapperName;
   List<MappingMethods> mappings;
 }

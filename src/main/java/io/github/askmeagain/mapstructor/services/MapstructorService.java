@@ -29,7 +29,7 @@ public class MapstructorService {
     var result = dividedByParent.entrySet()
         .stream()
         .map(mappingByType -> MappingMethods.builder()
-            .outputType(mappingByType.getKey())
+            .outputType(FindTypeVisitor.find(mappingByType.getKey(), psiFile))
             .mappings(mappingByType.getValue()
                 .stream()
                 .map(mapping -> MappingMethods.TargetSourceContainer.builder()
@@ -49,6 +49,7 @@ public class MapstructorService {
     var fixedRefMappings = findRefMappings(fixedInputs);
 
     return CollectedResult.builder()
+        .packageName("package.dot.name.whatever;")
         .mapperName("SimpleMapper")
         .mappings(fixedRefMappings)
         .build();
