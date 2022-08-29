@@ -1,4 +1,4 @@
-package io.github.askmeagain.mapstructor.services;
+package io.github.askmeagain.mapstructor.mapper.simple;
 
 import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase;
 import junit.framework.TestCase;
@@ -26,22 +26,14 @@ public class MapstructorActionTest extends LightJavaCodeInsightFixtureTestCase {
   }
 
   @Test
-  public void testDoStuff() {
-    myFixture.configureByFiles(
-        "src/test/resources/cases/case1/Case1.java",
-        "src/test/java/io/github/askmeagain/mapstructor/entities/Input1.java",
-        "src/test/java/io/github/askmeagain/mapstructor/entities/Output1.java"
-    );
-
-    myFixture.performEditorAction(MAPSTRUCTOR_ACTION);
-  }
-
-  @Test
   public void testSimpleStuff() {
     myFixture.configureByFiles(
         "src/test/resources/cases/simple/CaseSimple.java",
         "src/test/java/io/github/askmeagain/mapstructor/entities/Input1.java",
-        "src/test/java/io/github/askmeagain/mapstructor/entities/Output1.java"
+        "src/test/java/io/github/askmeagain/mapstructor/entities/Input2.java",
+        "src/test/java/io/github/askmeagain/mapstructor/entities/Output1.java",
+        "src/test/java/io/github/askmeagain/mapstructor/entities/Output2.java",
+        "src/test/java/io/github/askmeagain/mapstructor/entities/Output3.java"
     );
 
     myFixture.performEditorAction(MAPSTRUCTOR_ACTION);

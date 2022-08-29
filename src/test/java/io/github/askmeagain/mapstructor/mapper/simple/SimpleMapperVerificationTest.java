@@ -1,16 +1,21 @@
-package io.github.askmeagain.mapstructor.mapper;
+package io.github.askmeagain.mapstructor.mapper.simple;
 
 import io.github.askmeagain.mapstructor.entities.Output1;
 import io.github.askmeagain.mapstructor.entities.Output2;
 import io.github.askmeagain.mapstructor.entities.Output3;
+import lombok.SneakyThrows;
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
+
+import java.io.File;
+import java.io.FileInputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SimpleMapperVerificationTest {
 
   @Test
+  @SneakyThrows
   void mappingTest() {
 
     var outerVar = "a";
@@ -34,6 +39,14 @@ public class SimpleMapperVerificationTest {
     var result = SimpleMapper.INSTANCE.mapOutput1(outerVar, outerVar2);
 
     assertThat(original).isEqualTo(result);
+
+    var path1 = new File("src/test/java/io/github/askmeagain/mapstructor/mapper/simple/SimpleMapper.java");
+    var path2 = new File("src/test/resources/cases/simple/expected.java");
+
+    var inputStream1 = new FileInputStream(path1);
+    var inputStream2 = new FileInputStream(path2);
+
+    assertThat(IOUtils.contentEquals(inputStream1, inputStream2)).isTrue();
 
   }
 

@@ -1,10 +1,8 @@
-package io.github.askmeagain.mapstructor.mapper;
+package io.github.askmeagain.mapstructor.mapper.simple;
 
-import com.sun.xml.bind.v2.TODO;
 import io.github.askmeagain.mapstructor.entities.Output1;
 import io.github.askmeagain.mapstructor.entities.Output2;
 import io.github.askmeagain.mapstructor.entities.Output3;
-import org.junit.jupiter.api.DisplayNameGenerator;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
