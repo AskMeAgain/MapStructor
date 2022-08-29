@@ -1,17 +1,20 @@
-package cases.case1;
+package io.github.askmeagain.mapstructor.mapper;
 
 import io.github.askmeagain.mapstructor.entities.Output1;
 import io.github.askmeagain.mapstructor.entities.Output2;
 import io.github.askmeagain.mapstructor.entities.Output3;
+import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 
-public class Case1 {
+import static org.assertj.core.api.Assertions.assertThat;
 
-  public Output1 testMethod(String test) {
+public class SimpleMapperVerificationTest {
+
+  @Test
+  void mappingTest() {
 
     var outerVar = "a";
     var outerVar2 = "a";
-
-    <selection>
     var output2Nested = new Output2();
     var output = new Output1();
     var superNested = new Output3();
@@ -26,8 +29,12 @@ public class Case1 {
     output.setInput5("abc");
     output.setNestedThings(output2Nested);
 
-    return output;
-    </selection>
+    var original = output;
+
+    var result = SimpleMapper.INSTANCE.mapOutput1(outerVar, outerVar2);
+
+    assertThat(original).isEqualTo(result);
+
   }
 
 }

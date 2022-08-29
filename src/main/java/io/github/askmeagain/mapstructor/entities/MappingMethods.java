@@ -36,6 +36,10 @@ public class MappingMethods {
 
     result.addAll(deepMappings);
 
+    mappings.stream()
+        .filter(x -> x.getRefToOtherMapping() != null)
+        .forEach(x -> result.removeIf(variableWithName -> variableWithName.getType().equals(x.getRefTargetType())));
+
     return new ArrayList<>(result);
   }
 

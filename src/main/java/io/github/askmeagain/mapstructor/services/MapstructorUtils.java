@@ -1,10 +1,15 @@
 package io.github.askmeagain.mapstructor.services;
 
+import io.github.askmeagain.mapstructor.entities.VariableWithName;
 import org.apache.commons.text.CaseUtils;
 
 import java.util.regex.Pattern;
 
 public class MapstructorUtils {
+
+  public static String getInput(VariableWithName variableWithName) {
+    return variableWithName.getType().getPresentableText() + " " + variableWithName.getName().getText();
+  }
 
   public static boolean matchesRegex(String regex, String text) {
     var pattern = Pattern.compile(regex);
@@ -19,6 +24,6 @@ public class MapstructorUtils {
 
     var name = expression.substring(dotIndex + 4, bracketIndex);
 
-    return CaseUtils.toCamelCase(name, false);
+    return Character.toLowerCase(name.charAt(0)) + name.substring(1);
   }
 }

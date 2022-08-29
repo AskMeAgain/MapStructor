@@ -3,7 +3,10 @@ package io.github.askmeagain.mapstructor.printer;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.askmeagain.mapstructor.entities.MappingMethods;
+import io.github.askmeagain.mapstructor.services.MapstructorUtils;
 import org.apache.commons.lang.StringUtils;
+
+import java.util.stream.Collectors;
 
 public class MapstructMappingPrinter {
 
@@ -26,16 +29,21 @@ public class MapstructMappingPrinter {
 
       if (inputs.size() == 1) {
         hasSource = true;
-        stripRight = "TODO, BUT SINGLE MAPPING!";
+        stripRight = inputs.stream()
+            .map(x -> x.getName().getText())
+            .collect(Collectors.joining(""));
       } else {
+        hasSource = false;
         hasExpression = true;
-        expressionText = "TODO, BUT " + inputs.size() + " MAPPING!";
+        expressionText = "map" + mapping.getRefToOtherMapping().getOutputType().getPresentableText() + "(" + inputs.stream()
+            .map(x -> x.getName().getText())
+            .collect(Collectors.joining(", ")) + ")";
       }
     }
 
     return MAPSTRUCT_MAPPING_TEMPLATE
         .replace("$SOURCE", hasSource ? ", source = \"$SOURCE_MAPPING\"" : "")
-        .replace("$EXPRESSION", hasExpression ? ", expression = \"" + expressionText + "\"" : "")
+        .replace("$EXPRESSION", hasExpression ? ", expression = \"java(" + expressionText + ")\"" : "")
         .replace("$CONSTANT", hasConstant ? ", constant = \"" + StringUtils.strip(constant.getText(), "\"") + "\"" : "")
         .replace("$TARGET_MAPPING", mapping.getTarget())
         .replace("$SOURCE_MAPPING", stripRight);

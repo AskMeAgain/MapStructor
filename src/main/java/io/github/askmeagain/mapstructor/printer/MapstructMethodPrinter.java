@@ -3,6 +3,7 @@ package io.github.askmeagain.mapstructor.printer;
 import com.intellij.psi.PsiReferenceExpression;
 import io.github.askmeagain.mapstructor.entities.MappingMethods;
 import io.github.askmeagain.mapstructor.entities.VariableWithName;
+import io.github.askmeagain.mapstructor.services.MapstructorUtils;
 import org.apache.tools.ant.types.Environment;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,13 +22,9 @@ public class MapstructMethodPrinter {
                 .map(MapstructMappingPrinter::print)
                 .collect(Collectors.joining("\n")))
             .replace("$OUTPUT_TYPE", method.getOutputType().getPresentableText())
-            .replace("$PARAMS", method.getInputs().stream()
-                .map(MapstructMethodPrinter::getInput)
+            .replace("$PARAMS", method.calculateDeepInputs().stream()
+                .map(MapstructorUtils::getInput)
                 .collect(Collectors.joining(", "))))
         .collect(Collectors.joining("\n"));
-  }
-
-  private static String getInput(VariableWithName variableWithName) {
-    return variableWithName.getType().getPresentableText() + " " + variableWithName.getName().getText();
   }
 }

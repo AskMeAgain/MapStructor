@@ -49,7 +49,7 @@ public class MapstructorService {
     var fixedRefMappings = findRefMappings(fixedInputs);
 
     return CollectedResult.builder()
-        .mapperName("TODO")
+        .mapperName("SimpleMapper")
         .mappings(fixedRefMappings)
         .build();
   }

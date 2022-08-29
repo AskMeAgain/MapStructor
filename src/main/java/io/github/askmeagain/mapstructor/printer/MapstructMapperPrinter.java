@@ -12,6 +12,8 @@ public class MapstructMapperPrinter {
   private static final String MAPSTRUCT_TEMPLATE = "@Mapper\n" +
       "public interface $MAPPER_NAME {\n" +
       "\n" +
+      "  $MAPPER_NAME INSTANCE = Mappers.getMapper($MAPPER_NAME.class);\n" +
+      "\n" +
       "$MAPPING_METHODS" +
       "\n" +
       "}";

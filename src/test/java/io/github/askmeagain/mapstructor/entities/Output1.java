@@ -1,11 +1,11 @@
 package io.github.askmeagain.mapstructor.entities;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Setter;
+import lombok.*;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Output1 {
 
   String input1;

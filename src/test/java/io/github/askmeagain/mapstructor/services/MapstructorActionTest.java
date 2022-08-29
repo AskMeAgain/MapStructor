@@ -46,7 +46,7 @@ public class MapstructorActionTest extends LightJavaCodeInsightFixtureTestCase {
 
     myFixture.performEditorAction(MAPSTRUCTOR_ACTION);
     myFixture.checkResultByFile(
-        "src/test/resources/cases/simple/TODO.java",
+        "src/test/resources/cases/simple/SimpleMapper.java",
         "src/test/resources/cases/simple/expected.java",
         false
     );
