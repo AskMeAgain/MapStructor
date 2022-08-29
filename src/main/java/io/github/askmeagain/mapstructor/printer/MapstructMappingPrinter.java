@@ -19,10 +19,23 @@ public class MapstructMappingPrinter {
 
     var stripLeft = StringUtils.strip(mapping.getSource().getText(), "(");
     var stripRight = StringUtils.strip(stripLeft, ")");
+    var expressionText = "";
+
+    if (mapping.getRefToOtherMapping() != null) {
+      var inputs = mapping.getRefToOtherMapping().calculateDeepInputs();
+
+      if (inputs.size() == 1) {
+        hasSource = true;
+        stripRight = "TODO, BUT SINGLE MAPPING!";
+      } else {
+        hasExpression = true;
+        expressionText = "TODO, BUT " + inputs.size() + " MAPPING!";
+      }
+    }
 
     return MAPSTRUCT_MAPPING_TEMPLATE
         .replace("$SOURCE", hasSource ? ", source = \"$SOURCE_MAPPING\"" : "")
-        .replace("$EXPRESSION", hasExpression ? "" : "")
+        .replace("$EXPRESSION", hasExpression ? ", expression = \"" + expressionText + "\"" : "")
         .replace("$CONSTANT", hasConstant ? ", constant = \"" + StringUtils.strip(constant.getText(), "\"") + "\"" : "")
         .replace("$TARGET_MAPPING", mapping.getTarget())
         .replace("$SOURCE_MAPPING", stripRight);

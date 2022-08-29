@@ -43,17 +43,54 @@ public class MapstructorService {
     calcInputs(result);
 
     //types of "outside" variables are not always found
-    var fixedInputs = fixInputs(result);
+    var fixedInputs = findOutsideInputs(result);
 
-    //we need to "fix" referencing mappings
+    //we need to find reference mappings
+    var fixedRefMappings = findRefMappings(fixedInputs);
 
     return CollectedResult.builder()
         .mapperName("TODO")
-        .mappings(fixedInputs)
+        .mappings(fixedRefMappings)
         .build();
   }
 
-  private List<MappingMethods> fixInputs(List<MappingMethods> result) {
+  private List<MappingMethods> findRefMappings(List<MappingMethods> inputs) {
+
+    for (var method : inputs) {
+      var newMappings = method.getMappings().stream()
+          .map(this::calcRefTarget)
+          .collect(Collectors.toList());
+
+      method.setMappings(newMappings);
+    }
+
+    for (var method : inputs) {
+      for (var mapping : method.getMappings()) {
+        for (var outputType : inputs) {
+          if (outputType.getOutputType().equals(mapping.getRefTargetType())) {
+            mapping.setRefToOtherMapping(outputType);
+            break;
+          }
+        }
+      }
+    }
+
+    return inputs;
+  }
+
+  private MappingMethods.TargetSourceContainer calcRefTarget(MappingMethods.TargetSourceContainer sourceContainer) {
+
+    var element = sourceContainer.getSource();
+
+    var ref = PsiTreeUtil.getChildOfType(element, PsiReferenceExpression.class);
+
+    if (ref != null) {
+      return sourceContainer.withRefTargetType(ref.getType());
+    }
+    return sourceContainer;
+  }
+
+  private List<MappingMethods> findOutsideInputs(List<MappingMethods> result) {
     return result.stream()
         .map(x -> {
           var newList = x.getInputs().stream()
