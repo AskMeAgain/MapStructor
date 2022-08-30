@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 public class MapstructMapperPrinter {
 
   private static final String MAPSTRUCT_TEMPLATE =
-      "package $PACKAGE\n;" +
+      "package $PACKAGE;\n" +
           "\n" +
           "$IMPORTS\n" +
           "\n" +

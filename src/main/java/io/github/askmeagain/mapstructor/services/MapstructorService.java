@@ -49,7 +49,7 @@ public class MapstructorService {
     var fixedRefMappings = findRefMappings(fixedInputs);
 
     return CollectedResult.builder()
-        .packageName("package.dot.name.whatever;")
+        .packageName("io.github.askmeagain.mapstructor.mapper.simple")
         .mapperName("SimpleMapper")
         .mappings(fixedRefMappings)
         .build();
@@ -86,7 +86,8 @@ public class MapstructorService {
     var ref = PsiTreeUtil.getChildOfType(element, PsiReferenceExpression.class);
 
     if (ref != null) {
-      return sourceContainer.withRefTargetType(ref.getType());
+      var type = FindTypeVisitor.find(psiFile, ref);
+      return sourceContainer.withRefTargetType(type);
     }
     return sourceContainer;
   }

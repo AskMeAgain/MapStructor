@@ -1,9 +1,6 @@
 package io.github.askmeagain.mapstructor.visitor;
 
-import com.intellij.psi.JavaRecursiveElementVisitor;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReferenceExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.psi.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,9 +21,9 @@ public class FindTypeVisitor extends JavaRecursiveElementVisitor {
   }
 
 
-  public static PsiType find(PsiElement element, PsiReferenceExpression typeToSearchFor) {
+  public static PsiType find(PsiFile psiFile, PsiReferenceExpression typeToSearchFor) {
     var instance = new FindTypeVisitor(typeToSearchFor);
-    element.accept(instance);
+    psiFile.accept(instance);
     return instance.getType();
   }
 

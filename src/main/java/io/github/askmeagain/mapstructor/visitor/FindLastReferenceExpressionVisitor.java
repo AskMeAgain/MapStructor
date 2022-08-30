@@ -3,7 +3,6 @@ package io.github.askmeagain.mapstructor.visitor;
 import com.intellij.psi.*;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
