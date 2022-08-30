@@ -1,4 +1,4 @@
-package io.github.askmeagain.mapstructor.mapper.simple;
+package io.github.askmeagain.mapstructor.cases.simple;
 
 import io.github.askmeagain.mapstructor.entities.Output1;
 import io.github.askmeagain.mapstructor.entities.Output2;

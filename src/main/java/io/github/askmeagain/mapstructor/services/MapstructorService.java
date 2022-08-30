@@ -49,7 +49,7 @@ public class MapstructorService {
     var fixedRefMappings = findRefMappings(fixedInputs);
 
     return CollectedResult.builder()
-        .packageName("io.github.askmeagain.mapstructor.mapper.simple")
+        .packageName("io.github.askmeagain.mapstructor.cases.simple")
         .mapperName("SimpleMapper")
         .mappings(fixedRefMappings)
         .build();

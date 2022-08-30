@@ -14,7 +14,7 @@ dependencies {
     testImplementation 'org.mapstruct:mapstruct:1.5.2.Final'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
     testAnnotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
-
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.1'
     testImplementation 'org.assertj:assertj-core:3.23.1'
 
     implementation 'org.apache.commons:commons-text:1.9'
