@@ -29,7 +29,7 @@ public class MapstructorService {
     var result = dividedByParent.entrySet()
         .stream()
         .map(mappingByType -> MappingMethods.builder()
-            .outputType(mappingByType.getKey()) //TODO
+            .outputType(mappingByType.getKey())
             .mappings(mappingByType.getValue()
                 .stream()
                 .map(mapping -> MappingMethods.TargetSourceContainer.builder()
@@ -48,8 +48,10 @@ public class MapstructorService {
     //we need to find reference mappings
     var fixedRefMappings = findRefMappings(fixedInputs);
 
+    var packageName = ((PsiClassOwner) psiFile).getPackageName();
+
     return CollectedResult.builder()
-        .packageName("io.github.askmeagain.mapstructor.cases.simple")
+        .packageName(packageName)
         .mapperName("SimpleMapper")
         .mappings(fixedRefMappings)
         .build();
