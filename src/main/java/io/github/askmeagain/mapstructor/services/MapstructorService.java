@@ -21,7 +21,7 @@ public class MapstructorService {
 
   public CollectedResult calc(PsiCodeBlock codeBlock) {
 
-    var straightMappingList = MappingVisitor.find(codeBlock);
+    var straightMappingList = MappingVisitor.find(codeBlock, psiFile);
 
     var dividedByParent = straightMappingList.stream()
         .collect(Collectors.groupingBy(BasicMapping::getParent));
@@ -29,7 +29,7 @@ public class MapstructorService {
     var result = dividedByParent.entrySet()
         .stream()
         .map(mappingByType -> MappingMethods.builder()
-            .outputType(FindTypeVisitor.find(mappingByType.getKey(), psiFile))
+            .outputType(mappingByType.getKey()) //TODO
             .mappings(mappingByType.getValue()
                 .stream()
                 .map(mapping -> MappingMethods.TargetSourceContainer.builder()

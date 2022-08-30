@@ -1,29 +1,29 @@
 package io.github.askmeagain.mapstructor.visitor;
 
-import com.intellij.psi.JavaRecursiveElementVisitor;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReferenceExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.psi.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class FindLastReferenceExpressionVisitor extends JavaRecursiveElementVisitor {
 
   @Getter
   private PsiType lastPsiType;
 
+  private final PsiFile psiFile;
+
   @Override
   public void visitReferenceExpression(PsiReferenceExpression expression) {
     if (expression.getType() != null && lastPsiType == null) {
-      lastPsiType = expression.getType();
+      lastPsiType = FindTypeVisitor.find(psiFile, expression);
     }
     super.visitReferenceExpression(expression);
   }
 
-  public static PsiType find(PsiElement element) {
-    var instance = new FindLastReferenceExpressionVisitor();
+  public static PsiType find(PsiElement element, PsiFile psiFile) {
+    var instance = new FindLastReferenceExpressionVisitor(psiFile);
     element.accept(instance);
     return instance.getLastPsiType();
   }
