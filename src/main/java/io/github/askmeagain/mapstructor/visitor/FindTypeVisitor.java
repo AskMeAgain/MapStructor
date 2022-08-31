@@ -20,6 +20,12 @@ public class FindTypeVisitor extends JavaRecursiveElementVisitor {
     }
   }
 
+  public void visitLocalVariable(PsiLocalVariable variable) {
+    super.visitVariable(variable);
+    if(variable.getName().equals(baseName.getText())){
+      type = variable.getType();
+    }
+  }
 
   public static PsiType find(PsiFile psiFile, PsiReferenceExpression typeToSearchFor) {
     var instance = new FindTypeVisitor(typeToSearchFor);

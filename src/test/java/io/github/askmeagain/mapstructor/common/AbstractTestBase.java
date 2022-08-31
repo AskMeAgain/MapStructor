@@ -2,13 +2,12 @@ package io.github.askmeagain.mapstructor.common;
 
 import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase;
 import lombok.SneakyThrows;
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.nio.file.Files;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -49,10 +48,10 @@ public abstract class AbstractTestBase extends LightJavaCodeInsightFixtureTestCa
     var path1 = new File("src/test/java/io/github/askmeagain/mapstructor/cases/" + displayName + "/SimpleMapper.java");
     var path2 = new File("src/test/resources/cases/" + displayName + "/expected.java");
 
-    var inputStream1 = new FileInputStream(path1);
-    var inputStream2 = new FileInputStream(path2);
+    var orig = Files.readAllLines(path1.toPath());
+    var orig2 = Files.readAllLines(path2.toPath());
 
-    assertThat(IOUtils.contentEquals(inputStream1, inputStream2)).isTrue();
+    assertThat(orig).containsAll(orig2);
   }
 
   private void executeTest() {
