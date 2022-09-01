@@ -3,14 +3,13 @@ package io.github.askmeagain.mapstructor.printer;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.askmeagain.mapstructor.entities.MappingMethods;
-import io.github.askmeagain.mapstructor.services.MapstructorUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.stream.Collectors;
 
 public class MapstructMappingPrinter {
 
-  public static String MAPSTRUCT_MAPPING_TEMPLATE = "  @Mapping(target = \"$TARGET_MAPPING\"$EXPRESSION$CONSTANT$SOURCE)";
+  public static String MAPSTRUCT_MAPPING_TEMPLATE = "  @Mapping(target = \"$TARGET_MAPPING\"$EXPRESSION$CONSTANT$SOURCE$QUALIFIED_BY_NAME)";
 
   public static String print(MappingMethods.TargetSourceContainer mapping) {
 
@@ -19,9 +18,10 @@ public class MapstructMappingPrinter {
     var hasSource = constant == null;
     var hasConstant = constant != null;
     var hasExpression = false;
+    var isExternalMethod = mapping.isExternalMethod();
 
     var stripLeft = StringUtils.strip(mapping.getSource().getText(), "(");
-    var stripRight = StringUtils.strip(stripLeft, ")");
+    var sourceText = StringUtils.strip(stripLeft, ")");
     var expressionText = "";
 
     if (mapping.getRefToOtherMapping() != null) {
@@ -29,7 +29,7 @@ public class MapstructMappingPrinter {
 
       if (inputs.size() == 1) {
         hasSource = true;
-        stripRight = inputs.stream()
+        sourceText = inputs.stream()
             .map(x -> x.getName().getText())
             .collect(Collectors.joining(""));
       } else {
@@ -41,11 +41,18 @@ public class MapstructMappingPrinter {
       }
     }
 
+    var qualifiedText = "";
+    if (isExternalMethod) {
+      qualifiedText = ", qualifiedByName=\"" + MapstructExternalMethodPrinter.getMethodName(mapping) + "\"";
+      sourceText = MapstructExternalMethodPrinter.computeExternalMethods(mapping);
+    }
+
     return MAPSTRUCT_MAPPING_TEMPLATE
         .replace("$SOURCE", hasSource ? ", source = \"$SOURCE_MAPPING\"" : "")
         .replace("$EXPRESSION", hasExpression ? ", expression = \"java(" + expressionText + ")\"" : "")
         .replace("$CONSTANT", hasConstant ? ", constant = \"" + StringUtils.strip(constant.getText(), "\"") + "\"" : "")
         .replace("$TARGET_MAPPING", mapping.getTarget())
-        .replace("$SOURCE_MAPPING", stripRight);
+        .replace("$SOURCE_MAPPING", sourceText)
+        .replace("$QUALIFIED_BY_NAME", isExternalMethod ? qualifiedText : "");
   }
 }

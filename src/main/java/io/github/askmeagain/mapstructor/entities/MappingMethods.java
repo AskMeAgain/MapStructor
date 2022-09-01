@@ -1,10 +1,13 @@
 package io.github.askmeagain.mapstructor.entities;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiIdentifier;
-import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.PsiType;
-import lombok.*;
+import com.intellij.psi.util.PsiTreeUtil;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.With;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -53,6 +56,10 @@ public class MappingMethods {
     PsiType refTargetType;
 
     MappingMethods refToOtherMapping;
+
+    public boolean isExternalMethod() {
+      return PsiTreeUtil.getChildOfType(source, PsiMethodCallExpression.class) != null;
+    }
   }
 
 }

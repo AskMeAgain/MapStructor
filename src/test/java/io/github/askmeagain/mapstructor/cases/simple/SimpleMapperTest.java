@@ -5,13 +5,12 @@ import io.github.askmeagain.mapstructor.entities.Output1;
 import io.github.askmeagain.mapstructor.entities.Output2;
 import io.github.askmeagain.mapstructor.entities.Output3;
 import lombok.SneakyThrows;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class MapstructorActionTest extends AbstractTestBase {
+public class SimpleMapperTest extends AbstractTestBase {
 
   @ParameterizedTest
   @CsvSource({
@@ -29,7 +28,6 @@ public class MapstructorActionTest extends AbstractTestBase {
         .isEqualTo(result);
   }
 
-  @NotNull
   private static Output1 mappingResult(String a, String b) {
 
     //<selection>

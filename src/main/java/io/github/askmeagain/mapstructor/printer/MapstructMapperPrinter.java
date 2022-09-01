@@ -18,6 +18,8 @@ public class MapstructMapperPrinter {
           "\n" +
           "$MAPPING_METHODS" +
           "\n" +
+          "$EXTERNAL_METHODS\n" +
+          "\n" +
           "}";
 
   public static String returnMapstructTemplate(CollectedResult result) {
@@ -25,6 +27,7 @@ public class MapstructMapperPrinter {
         .replace("$PACKAGE", result.getPackageName())
         .replace("$IMPORTS", MapstructImportPrinter.print(result.getMappings()))
         .replace("$MAPPER_NAME", result.getMapperName())
-        .replace("$MAPPING_METHODS", MapstructMethodPrinter.print(result.getMappings()));
+        .replace("$MAPPING_METHODS", MapstructMethodPrinter.print(result.getMappings()))
+        .replace("$EXTERNAL_METHODS", MapstructExternalMethodPrinter.print(result.getMappings()));
   }
 }
