@@ -14,18 +14,18 @@ public interface SimpleMapper {
 
   @Mapping(target = "superNested1", constant = "1")
   @Mapping(target = "superNested2", constant = "1")
-  @Mapping(target = "superOuterVariable", source = "outerVar2")
-  Output3 mapOutput3(String outerVar2);
+  @Mapping(target = "superOuterVariable", source = "b")
+  Output3 mapOutput3(String b);
 
   @Mapping(target = "input1", constant = "test")
   @Mapping(target = "input5", constant = "abc")
-  @Mapping(target = "nestedThings", expression = "java(mapOutput2(outerVar, outerVar2))")
-  Output1 mapOutput1(String outerVar, String outerVar2);
+  @Mapping(target = "nestedThings", expression = "java(mapOutput2(a, b))")
+  Output1 mapOutput1(String a, String b);
 
   @Mapping(target = "nested1", constant = "1")
   @Mapping(target = "nested2", constant = "1")
-  @Mapping(target = "outerVariable", source = "outerVar")
-  @Mapping(target = "superNestedObject", source = "outerVar2")
-  Output2 mapOutput2(String outerVar, String outerVar2);
+  @Mapping(target = "outerVariable", source = "a")
+  @Mapping(target = "superNestedObject", source = "b")
+  Output2 mapOutput2(String a, String b);
 
 }

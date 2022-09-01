@@ -6,14 +6,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.nio.file.Files;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import java.nio.file.Path;
+import java.util.stream.Collectors;
 
 public abstract class AbstractTestBase extends LightJavaCodeInsightFixtureTestCase {
 
-  private static final String MAPSTRUCTOR_ACTION = "io.github.askmeagain.mapstructor.MapstructorAction";
+  private static final String mapstructorAction = "io.github.askmeagain.mapstructor.MapstructorAction";
 
   @Override
   public final String getTestDataPath() {
@@ -35,47 +34,34 @@ public abstract class AbstractTestBase extends LightJavaCodeInsightFixtureTestCa
     executeTest();
   }
 
-  @Test
-  public void mappingResultComparison() {
-    compare();
-  }
-
-
   @SneakyThrows
-  private void compare() {
-    var displayName = getDisplayName();
-
-    var path1 = new File("src/test/java/io/github/askmeagain/mapstructor/cases/" + displayName + "/SimpleMapper.java");
-    var path2 = new File("src/test/resources/cases/" + displayName + "/expected.java");
-
-    var orig = Files.readAllLines(path1.toPath());
-    var orig2 = Files.readAllLines(path2.toPath());
-
-    assertThat(orig).containsAll(orig2);
-  }
-
   private void executeTest() {
-    var displayName = getDisplayName();
 
+    var packageName = "src/test/java/" + this.getClass().getPackageName().replace(".", "/");
+    var testFileName = packageName + "/" + this.getClass().getSimpleName() + ".java";
+
+    var replacedMapperFile = Files.readAllLines(Path.of(testFileName)).stream()
+        .map(line -> line.replace("//<selection>", "<selection>"))
+        .map(line -> line.replace("//</selection>", "</selection>"))
+        .collect(Collectors.joining("\n"));
+
+    myFixture.addFileToProject(packageName + "/input.java", replacedMapperFile);
     myFixture.configureByFiles(
-        "src/test/resources/cases/" + displayName + "/input.java",
-        "src/test/java/io/github/askmeagain/mapstructor/entities/Input1.java",
-        "src/test/java/io/github/askmeagain/mapstructor/entities/Input2.java",
-        "src/test/java/io/github/askmeagain/mapstructor/entities/Output1.java",
-        "src/test/java/io/github/askmeagain/mapstructor/entities/Output2.java",
-        "src/test/java/io/github/askmeagain/mapstructor/entities/Output3.java"
+        packageName + "/input.java",
+        packageName + "/../../entities/Input1.java",
+        packageName + "/../../entities/Input2.java",
+        packageName + "/../../entities/Output1.java",
+        packageName + "/../../entities/Output2.java",
+        packageName + "/../../entities/Output3.java"
     );
 
-    myFixture.performEditorAction(MAPSTRUCTOR_ACTION);
+    myFixture.performEditorAction(mapstructorAction);
 
+    //both files have same path, but are not in the same test project
     myFixture.checkResultByFile(
-        "src/test/resources/cases/" + displayName + "/SimpleMapper.java",
-        "src/test/resources/cases/" + displayName + "/expected.java",
+        packageName + "/SimpleMapper.java",
+        packageName + "/SimpleMapper.java",
         false
     );
-  }
-
-  private String getDisplayName() {
-    return this.getClass().getAnnotation(MapperTest.class).value();
   }
 }
