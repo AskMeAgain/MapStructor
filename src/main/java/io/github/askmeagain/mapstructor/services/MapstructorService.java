@@ -6,6 +6,7 @@ import io.github.askmeagain.mapstructor.entities.BasicMapping;
 import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
 import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
 import io.github.askmeagain.mapstructor.entities.VariableWithNameEntity;
+import io.github.askmeagain.mapstructor.visitor.FindInputsVisitor;
 import io.github.askmeagain.mapstructor.visitor.FindTypeVisitor;
 import io.github.askmeagain.mapstructor.visitor.MappingVisitor;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +52,7 @@ public class MapstructorService {
     //we need to find reference mappings
     findRefMappings(mapstructEntity);
 
-    var externalMethodCalculation = findExternalMethods(mapstructEntity.getMappings());
+    var externalMethodCalculation = findExternalMethods(mapstructEntity);
 
     var packageName = ((PsiClassOwner) psiFile).getPackageName();
 
@@ -62,22 +63,26 @@ public class MapstructorService {
         .build();
   }
 
-  private List<MapstructMethodEntity> findExternalMethods(List<MapstructMethodEntity> fixedRefMappings) {
+  private void findExternalMethods(MapStructMapperEntity entity) {
 
-    for (var method : fixedRefMappings) {
+    for (var method : entity.getMappings()) {
       for (var mapping : method.getMappings()) {
 
-        var isExternalMethod = PsiTreeUtil.getChildOfType(mapping.getSource(), PsiMethodCallExpression.class) != null;
-
-        if (isExternalMethod) {
+        var methodCallExpression = PsiTreeUtil.getChildOfType(mapping.getSource(), PsiMethodCallExpression.class);
+        if (methodCallExpression != null) {
           mapping.setExternalMethod(true);
-//          mapping.setExpressionInputParameters();
-//          mapping.setExpressionOutputType();
+          mapping.setExpressionOutputType(methodCallExpression.getMethodExpression().getType());
+          mapping.setExpressionInputParameters(findExternalMethodExpressionType(mapping));
         }
       }
     }
+  }
 
-    return fixedRefMappings;
+  private List<VariableWithNameEntity> findExternalMethodExpressionType(MapstructMethodEntity.TargetSourceContainer mapping) {
+
+    var found = FindInputsVisitor.find(mapping.getSource(), psiFile);
+
+    return null;
   }
 
   private void findRefMappings(MapStructMapperEntity entity) {
