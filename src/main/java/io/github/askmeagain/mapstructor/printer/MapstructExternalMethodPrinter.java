@@ -13,7 +13,7 @@ public class MapstructExternalMethodPrinter {
   private static final String MAPSTRUCT_METHOD = "\n  @Named(\"$METHOD_NAME\")\n" +
       "  default $OUTPUT_TYPE $METHOD_NAME($PARAMS) {\n" +
       "    return $METHOD_BODY;\n" +
-      "  }\n\n";
+      "  }";
 
   public static String print(MapStructMapperEntity entity) {
     return entity.getExternalMethodEntities()

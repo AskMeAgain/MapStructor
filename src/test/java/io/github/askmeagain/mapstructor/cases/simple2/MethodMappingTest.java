@@ -21,15 +21,15 @@ public class MethodMappingTest extends AbstractTestBase {
         .isEqualTo(result);
   }
 
-  private static Output1 mapper(String abc) {
+  private Output1 mapper(String abc) {
     //<selection>
     var output = new Output1();
     var output2 = new Output2();
 
-    output2.setNested1("1" + (2 * 3) + "3");
+    output2.setNested1("1" + (2 * 3) + "3" + abc);
     output2.setNested2(abc);
 
-    output.setInput1(thisIsAMethod(abc));
+    output.setInput1(MethodMappingTest.thisIsAMethod(abc));
     output.setNestedThings(output2);
 
     return output;

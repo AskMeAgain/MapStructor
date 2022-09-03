@@ -7,8 +7,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
-import static io.github.askmeagain.mapstructor.cases.simple2.MethodMappingTest.thisIsAMethod;
-
 @Mapper
 public interface SimpleMapper {
 
@@ -24,11 +22,11 @@ public interface SimpleMapper {
 
   @Named("mapInput1")
   default String mapInput1(String abc) {
-    return thisIsAMethod(abc);
+    return MethodMappingTest.thisIsAMethod(abc);
   }
 
   @Named("mapNested1")
   default String mapNested1(String abc) {
-    return "1" + (2 * 3) + "3";
+    return "1" + (2 * 3) + "3" + abc;
   }
 }

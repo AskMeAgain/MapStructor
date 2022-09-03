@@ -63,22 +63,32 @@ public class MapstructorService {
 
     for (var method : entity.getMappings()) {
       for (var mapping : method.getMappings()) {
-
         var methodCallExpression = PsiTreeUtil.getChildOfType(mapping.getSource(), PsiMethodCallExpression.class);
+        var polyadicExpression = PsiTreeUtil.getChildOfType(mapping.getSource(),PsiPolyadicExpression.class);
+
         if (methodCallExpression != null) {
           var realInstance = FindMethodCallExpressionVisitor.find(methodCallExpression, psiFile);
-          var externalMethod = MapstructExternalMethodEntity.builder()
-              .methodBody(mapping.getSource())
-              .target(mapping.getTarget())
-              .outputType(realInstance.getMethodExpression().getType())
-              .inputParams(findExternalMethodInputTypes(mapping))
-              .build();
-          entity.getExternalMethodEntities().add(externalMethod);
-          mapping.setExternalMethod(true);
-          mapping.setExternalMethodEntity(externalMethod);
+          var type = realInstance.getMethodExpression().getType();
+          extracted(entity, mapping, type);
+        }
+        if(polyadicExpression != null){
+          var type = polyadicExpression.getType();
+          extracted(entity, mapping, type);
         }
       }
     }
+  }
+
+  private void extracted(MapStructMapperEntity entity, MapstructMethodEntity.TargetSourceContainer mapping, PsiType type) {
+    var externalMethod = MapstructExternalMethodEntity.builder()
+        .methodBody(mapping.getSource())
+        .target(mapping.getTarget())
+        .outputType(type)
+        .inputParams(findExternalMethodInputTypes(mapping))
+        .build();
+    entity.getExternalMethodEntities().add(externalMethod);
+    mapping.setExternalMethod(true);
+    mapping.setExternalMethodEntity(externalMethod);
   }
 
   private List<VariableWithNameEntity> findExternalMethodInputTypes(MapstructMethodEntity.TargetSourceContainer mapping) {
