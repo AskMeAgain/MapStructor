@@ -3,18 +3,18 @@ package io.github.askmeagain.mapstructor.cases.simple2;
 import io.github.askmeagain.mapstructor.common.AbstractTestBase;
 import io.github.askmeagain.mapstructor.entities.Output1;
 import io.github.askmeagain.mapstructor.entities.Output2;
-import lombok.SneakyThrows;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class MapstructorActionTest extends AbstractTestBase {
+public class MethodMappingTest extends AbstractTestBase {
 
-  @Test
-  @SneakyThrows
-  void mappingTest() {
-    var output = mapper("abc");
-    var result = SimpleMapper.INSTANCE.mapOutput1("abc");
+  @ParameterizedTest
+  @CsvSource({"abc", "def"})
+  void mappingTest(String input) {
+    var output = mapper(input);
+    var result = SimpleMapper.INSTANCE.mapOutput1(input);
 
     assertThat(output)
         .usingRecursiveComparison()
@@ -26,7 +26,7 @@ public class MapstructorActionTest extends AbstractTestBase {
     var output = new Output1();
     var output2 = new Output2();
 
-    output2.setNested1("1" + (2*3) + "3");
+    output2.setNested1("1" + (2 * 3) + "3");
     output2.setNested2(abc);
 
     output.setInput1(thisIsAMethod());
@@ -36,7 +36,7 @@ public class MapstructorActionTest extends AbstractTestBase {
     //</selection>
   }
 
-  private static String thisIsAMethod() {
+  public static String thisIsAMethod() {
     return "test";
   }
 }

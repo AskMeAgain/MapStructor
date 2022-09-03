@@ -1,6 +1,6 @@
 package io.github.askmeagain.mapstructor.printer;
 
-import io.github.askmeagain.mapstructor.entities.CollectedResult;
+import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -17,12 +17,10 @@ public class MapstructMapperPrinter {
           "  $MAPPER_NAME INSTANCE = Mappers.getMapper($MAPPER_NAME.class);\n" +
           "\n" +
           "$MAPPING_METHODS" +
-          "\n" +
           "$EXTERNAL_METHODS\n" +
-          "\n" +
           "}";
 
-  public static String returnMapstructTemplate(CollectedResult result) {
+  public static String print(MapStructMapperEntity result) {
     return MAPSTRUCT_TEMPLATE
         .replace("$PACKAGE", result.getPackageName())
         .replace("$IMPORTS", MapstructImportPrinter.print(result.getMappings()))

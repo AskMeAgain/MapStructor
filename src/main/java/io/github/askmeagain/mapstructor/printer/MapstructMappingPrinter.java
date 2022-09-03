@@ -2,7 +2,7 @@ package io.github.askmeagain.mapstructor.printer;
 
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.util.PsiTreeUtil;
-import io.github.askmeagain.mapstructor.entities.MappingMethods;
+import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.stream.Collectors;
@@ -11,7 +11,7 @@ public class MapstructMappingPrinter {
 
   public static String MAPSTRUCT_MAPPING_TEMPLATE = "  @Mapping(target = \"$TARGET_MAPPING\"$EXPRESSION$CONSTANT$SOURCE$QUALIFIED_BY_NAME)";
 
-  public static String print(MappingMethods.TargetSourceContainer mapping) {
+  public static String print(MapstructMethodEntity.TargetSourceContainer mapping) {
 
     var constant = PsiTreeUtil.getChildOfType(mapping.getSource(), PsiLiteralExpression.class);
 
@@ -43,8 +43,8 @@ public class MapstructMappingPrinter {
 
     var qualifiedText = "";
     if (isExternalMethod) {
-      qualifiedText = ", qualifiedByName=\"" + MapstructExternalMethodPrinter.getMethodName(mapping) + "\"";
-      sourceText = MapstructExternalMethodPrinter.computeExternalMethods(mapping);
+      qualifiedText = ", qualifiedByName=\"" + mapping.getExpressionOutputType().getPresentableText() + "\"";
+      sourceText = "";
     }
 
     return MAPSTRUCT_MAPPING_TEMPLATE

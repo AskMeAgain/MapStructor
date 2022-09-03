@@ -1,9 +1,7 @@
 package io.github.askmeagain.mapstructor.entities;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.PsiType;
-import com.intellij.psi.util.PsiTreeUtil;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,25 +13,24 @@ import java.util.stream.Collectors;
 @Data
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class MappingMethods {
+public class MapstructMethodEntity {
 
   private List<TargetSourceContainer> mappings;
 
   @EqualsAndHashCode.Include
   private PsiType outputType;
 
-  @With
   @Builder.Default
-  private List<VariableWithName> inputs = new ArrayList<>();
+  private List<VariableWithNameEntity> inputs = new ArrayList<>();
 
-  public List<VariableWithName> calculateDeepInputs() {
+  public List<VariableWithNameEntity> calculateDeepInputs() {
 
     var result = new HashSet<>(inputs);
 
     var deepMappings = mappings.stream()
         .map(TargetSourceContainer::getRefToOtherMapping)
         .filter(Objects::nonNull)
-        .map(MappingMethods::calculateDeepInputs)
+        .map(MapstructMethodEntity::calculateDeepInputs)
         .flatMap(Collection::stream)
         .collect(Collectors.toList());
 
@@ -55,11 +52,12 @@ public class MappingMethods {
     @With
     PsiType refTargetType;
 
-    MappingMethods refToOtherMapping;
+    MapstructMethodEntity refToOtherMapping;
 
-    public boolean isExternalMethod() {
-      return PsiTreeUtil.getChildOfType(source, PsiMethodCallExpression.class) != null;
-    }
+    List<VariableWithNameEntity> expressionInputParameters;
+    PsiType expressionOutputType;
+
+    boolean isExternalMethod;
   }
 
 }

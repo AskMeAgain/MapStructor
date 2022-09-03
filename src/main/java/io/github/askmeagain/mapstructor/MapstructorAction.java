@@ -30,11 +30,11 @@ public class MapstructorAction extends AnAction {
 
       var selectedText = caret.getSelectedText();
 
-      var codeBlock = psiJavaParserFacade.createCodeBlockFromText("{" + selectedText + "}", null);
+      var codeBlock = psiJavaParserFacade.createCodeBlockFromText("{" + selectedText + "}", psiFile);
 
-      var result = new MapstructorService(psiFile).calc(codeBlock);
+      var result = new MapstructorService(psiFile).calculate(codeBlock);
 
-      var printResult = MapstructMapperPrinter.returnMapstructTemplate(result);
+      var printResult = MapstructMapperPrinter.print(result);
 
       WriteCommandAction.runWriteCommandAction(project, () -> {
         try {

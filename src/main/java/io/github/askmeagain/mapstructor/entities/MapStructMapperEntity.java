@@ -8,10 +8,11 @@ import java.util.List;
 
 @Value
 @Builder
-public class CollectedResult {
+public class MapStructMapperEntity {
 
   String packageName;
   String mapperName;
-  List<MappingMethods> mappings;
+  List<MapstructMethodEntity> mappings;
   List<PsiType> imports;
+  List<MapstructExternalMethodEntity> externalMethodEntities;
 }

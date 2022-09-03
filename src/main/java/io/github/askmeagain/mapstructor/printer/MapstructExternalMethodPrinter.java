@@ -1,6 +1,8 @@
 package io.github.askmeagain.mapstructor.printer;
 
-import io.github.askmeagain.mapstructor.entities.MappingMethods;
+import com.intellij.psi.PsiElement;
+import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
+import io.github.askmeagain.mapstructor.entities.VariableWithNameEntity;
 
 import java.util.Collection;
 import java.util.List;
@@ -8,33 +10,30 @@ import java.util.stream.Collectors;
 
 public class MapstructExternalMethodPrinter {
 
-  private static final String MAPSTRUCT_METHOD = "\t@Named(\"$METHOD_NAME\")" +
+  private static final String MAPSTRUCT_METHOD = "\n\t@Named(\"$METHOD_NAME\")\n" +
       "\tdefault $OUTPUT_TYPE map$METHOD_NAME($PARAMS){\n" +
-      "\treturn $METHOD_BODY;\n" +
-      "\t}\n";
+      "\t\treturn $METHOD_BODY;\n" +
+      "\t}\n\n";
 
-  public static String print(List<MappingMethods> mappings) {
+  public static String print(List<MapstructMethodEntity> mappings) {
     return mappings.stream()
-        .map(MappingMethods::getMappings)
+        .map(MapstructMethodEntity::getMappings)
         .flatMap(Collection::stream)
-        .filter(MappingMethods.TargetSourceContainer::isExternalMethod)
+        .filter(MapstructMethodEntity.TargetSourceContainer::isExternalMethod)
         .map(MapstructExternalMethodPrinter::psiElementToMethod)
         .collect(Collectors.joining("\n"));
   }
 
-  private static String psiElementToMethod(MappingMethods.TargetSourceContainer container) {
+  private static String psiElementToMethod(MapstructMethodEntity.TargetSourceContainer container) {
+    var outputType = container.getExpressionOutputType();
+
     return MAPSTRUCT_METHOD
-        .replace("$OUTPUT_TYPE", "OutputTODO")
-        .replace("$METHOD_NAME", "output1TODO")
-        .replace("$PARAMS", "StringTODO todo")
+        .replace("$OUTPUT_TYPE", outputType.getPresentableText())
+        .replace("$METHOD_NAME", "map_" + outputType.getPresentableText())
+        .replace("$PARAMS", container.getExpressionInputParameters().stream()
+            .map(VariableWithNameEntity::getName)
+            .map(PsiElement::getText)
+            .collect(Collectors.joining(", ")))
         .replace("$METHOD_BODY", container.getSource().getText());
-  }
-
-  public static String getMethodName(MappingMethods.TargetSourceContainer container) {
-    return "MethodName";
-  }
-
-  public static String computeExternalMethods(MappingMethods.TargetSourceContainer container) {
-    return "inputSource";
   }
 }

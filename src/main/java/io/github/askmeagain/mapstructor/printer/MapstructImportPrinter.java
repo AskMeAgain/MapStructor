@@ -1,8 +1,8 @@
 package io.github.askmeagain.mapstructor.printer;
 
 import com.intellij.psi.PsiType;
-import io.github.askmeagain.mapstructor.entities.MappingMethods;
-import io.github.askmeagain.mapstructor.entities.VariableWithName;
+import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
+import io.github.askmeagain.mapstructor.entities.VariableWithNameEntity;
 
 import java.util.Collection;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 public class MapstructImportPrinter {
 
-  public static String print(List<MappingMethods> result){
+  public static String print(List<MapstructMethodEntity> result){
     var stream = Stream.of(
         "org.mapstruct.Mapper",
         "org.mapstruct.Mapping",
@@ -20,13 +20,13 @@ public class MapstructImportPrinter {
     );
 
     var another = result.stream()
-        .map(MappingMethods::getOutputType)
+        .map(MapstructMethodEntity::getOutputType)
         .map(PsiType::getCanonicalText);
 
     var collectedImportStream = result.stream()
-        .map(MappingMethods::calculateDeepInputs)
+        .map(MapstructMethodEntity::calculateDeepInputs)
         .flatMap(Collection::stream)
-        .map(VariableWithName::getType)
+        .map(VariableWithNameEntity::getType)
         .map(PsiType::getCanonicalText);
 
     return Stream.of(stream, collectedImportStream, another)

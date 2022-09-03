@@ -3,16 +3,14 @@ package io.github.askmeagain.mapstructor.entities;
 import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.psi.PsiType;
 import lombok.Builder;
-import lombok.Value;
-import lombok.With;
+import lombok.Data;
 
-@Value
+@Data
 @Builder
-public class VariableWithName {
+public class VariableWithNameEntity {
 
   PsiReferenceExpression name;
 
-  @With
   PsiType type;
 
 }

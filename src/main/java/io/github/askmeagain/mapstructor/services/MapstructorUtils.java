@@ -1,14 +1,13 @@
 package io.github.askmeagain.mapstructor.services;
 
-import io.github.askmeagain.mapstructor.entities.VariableWithName;
-import org.apache.commons.text.CaseUtils;
+import io.github.askmeagain.mapstructor.entities.VariableWithNameEntity;
 
 import java.util.regex.Pattern;
 
 public class MapstructorUtils {
 
-  public static String getInput(VariableWithName variableWithName) {
-    return variableWithName.getType().getPresentableText() + " " + variableWithName.getName().getText();
+  public static String getInput(VariableWithNameEntity variableWithNameEntity) {
+    return variableWithNameEntity.getType().getPresentableText() + " " + variableWithNameEntity.getName().getText();
   }
 
   public static boolean matchesRegex(String regex, String text) {
