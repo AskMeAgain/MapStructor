@@ -24,7 +24,7 @@ public interface SimpleMapper {
 
   @Named("mapInput1")
   default String mapInput1(String abc) {
-    return thisIsAMethod();
+    return thisIsAMethod(abc);
   }
 
   @Named("mapNested1")

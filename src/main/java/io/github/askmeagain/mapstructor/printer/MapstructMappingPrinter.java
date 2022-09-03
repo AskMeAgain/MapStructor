@@ -7,6 +7,8 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.stream.Collectors;
 
+import static io.github.askmeagain.mapstructor.services.MapstructorUtils.toPascalCase;
+
 public class MapstructMappingPrinter {
 
   public static String MAPSTRUCT_MAPPING_TEMPLATE = "  @Mapping(target = \"$TARGET_MAPPING\"$EXPRESSION$CONSTANT$SOURCE$QUALIFIED_BY_NAME)";
@@ -43,7 +45,8 @@ public class MapstructMappingPrinter {
 
     var qualifiedText = "";
     if (isExternalMethod) {
-      qualifiedText = ", qualifiedByName=\"" + mapping.getExpressionOutputType().getPresentableText() + "\"";
+      var methodName = "map" + toPascalCase(mapping.getTarget());
+      qualifiedText = ", qualifiedByName=\"" + methodName + "\"";
       sourceText = "";
     }
 

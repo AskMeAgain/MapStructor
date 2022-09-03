@@ -2,17 +2,25 @@ package io.github.askmeagain.mapstructor.entities;
 
 import com.intellij.psi.PsiType;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
+import lombok.Singular;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Value
+@Data
 @Builder
 public class MapStructMapperEntity {
 
   String packageName;
   String mapperName;
+
+  @Singular
   List<MapstructMethodEntity> mappings;
+
+  @Singular
   List<PsiType> imports;
-  List<MapstructExternalMethodEntity> externalMethodEntities;
+
+  @Builder.Default
+  List<MapstructExternalMethodEntity> externalMethodEntities = new ArrayList<>();
 }

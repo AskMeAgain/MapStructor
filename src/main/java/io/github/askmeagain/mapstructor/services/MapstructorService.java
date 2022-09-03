@@ -2,11 +2,9 @@ package io.github.askmeagain.mapstructor.services;
 
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import io.github.askmeagain.mapstructor.entities.BasicMapping;
-import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
-import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
-import io.github.askmeagain.mapstructor.entities.VariableWithNameEntity;
+import io.github.askmeagain.mapstructor.entities.*;
 import io.github.askmeagain.mapstructor.visitor.FindInputsVisitor;
+import io.github.askmeagain.mapstructor.visitor.FindMethodCallExpressionVisitor;
 import io.github.askmeagain.mapstructor.visitor.FindTypeVisitor;
 import io.github.askmeagain.mapstructor.visitor.MappingVisitor;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +39,11 @@ public class MapstructorService {
             .build())
         .collect(Collectors.toList());
 
+    var packageName = ((PsiClassOwner) psiFile).getPackageName();
+
     var mapstructEntity = MapStructMapperEntity.builder()
+        .mapperName("SimpleMapper")
+        .packageName(packageName)
         .mappings(result)
         .build();
 
@@ -52,15 +54,9 @@ public class MapstructorService {
     //we need to find reference mappings
     findRefMappings(mapstructEntity);
 
-    var externalMethodCalculation = findExternalMethods(mapstructEntity);
+    findExternalMethods(mapstructEntity);
 
-    var packageName = ((PsiClassOwner) psiFile).getPackageName();
-
-    return MapStructMapperEntity.builder()
-        .packageName(packageName)
-        .mapperName("SimpleMapper")
-        .mappings(externalMethodCalculation)
-        .build();
+    return mapstructEntity;
   }
 
   private void findExternalMethods(MapStructMapperEntity entity) {
@@ -70,19 +66,28 @@ public class MapstructorService {
 
         var methodCallExpression = PsiTreeUtil.getChildOfType(mapping.getSource(), PsiMethodCallExpression.class);
         if (methodCallExpression != null) {
+          var realInstance = FindMethodCallExpressionVisitor.find(methodCallExpression, psiFile);
+          var externalMethod = MapstructExternalMethodEntity.builder()
+              .methodBody(mapping.getSource())
+              .target(mapping.getTarget())
+              .outputType(realInstance.getMethodExpression().getType())
+              .inputParams(findExternalMethodExpressionType(mapping))
+              .build();
+          entity.getExternalMethodEntities().add(externalMethod);
           mapping.setExternalMethod(true);
-          mapping.setExpressionOutputType(methodCallExpression.getMethodExpression().getType());
-          mapping.setExpressionInputParameters(findExternalMethodExpressionType(mapping));
         }
       }
     }
   }
 
   private List<VariableWithNameEntity> findExternalMethodExpressionType(MapstructMethodEntity.TargetSourceContainer mapping) {
-
-    var found = FindInputsVisitor.find(mapping.getSource(), psiFile);
-
-    return null;
+    return FindInputsVisitor.find(mapping.getSource(), psiFile)
+        .stream()
+        .map(x -> VariableWithNameEntity.builder()
+            .type(FindTypeVisitor.find(psiFile, x))
+            .name(x)
+            .build())
+        .collect(Collectors.toList());
   }
 
   private void findRefMappings(MapStructMapperEntity entity) {

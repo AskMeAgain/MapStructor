@@ -29,14 +29,14 @@ public class MethodMappingTest extends AbstractTestBase {
     output2.setNested1("1" + (2 * 3) + "3");
     output2.setNested2(abc);
 
-    output.setInput1(thisIsAMethod());
+    output.setInput1(thisIsAMethod(abc));
     output.setNestedThings(output2);
 
     return output;
     //</selection>
   }
 
-  public static String thisIsAMethod() {
-    return "test";
+  public static String thisIsAMethod(String whatANiceInput) {
+    return "test" + whatANiceInput;
   }
 }

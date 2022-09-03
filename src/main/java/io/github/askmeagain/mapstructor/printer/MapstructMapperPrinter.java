@@ -23,9 +23,9 @@ public class MapstructMapperPrinter {
   public static String print(MapStructMapperEntity result) {
     return MAPSTRUCT_TEMPLATE
         .replace("$PACKAGE", result.getPackageName())
-        .replace("$IMPORTS", MapstructImportPrinter.print(result.getMappings()))
+        .replace("$IMPORTS", MapstructImportPrinter.print(result))
         .replace("$MAPPER_NAME", result.getMapperName())
         .replace("$MAPPING_METHODS", MapstructMethodPrinter.print(result.getMappings()))
-        .replace("$EXTERNAL_METHODS", MapstructExternalMethodPrinter.print(result.getMappings()));
+        .replace("$EXTERNAL_METHODS", MapstructExternalMethodPrinter.print(result));
   }
 }

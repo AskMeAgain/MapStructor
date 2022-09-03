@@ -10,6 +10,10 @@ public class MapstructorUtils {
     return variableWithNameEntity.getType().getPresentableText() + " " + variableWithNameEntity.getName().getText();
   }
 
+  public static String toPascalCase(String str) {
+    return Character.toUpperCase(str.charAt(0)) + str.substring(1);
+  }
+
   public static boolean matchesRegex(String regex, String text) {
     var pattern = Pattern.compile(regex);
     var matcher = pattern.matcher(text);
