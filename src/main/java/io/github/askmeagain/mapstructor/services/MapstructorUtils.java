@@ -29,4 +29,16 @@ public class MapstructorUtils {
 
     return Character.toLowerCase(name.charAt(0)) + name.substring(1);
   }
+
+  public static String removeBrackets(String text) {
+    if (text.startsWith("(")) {
+      text = text.substring(1);
+    }
+
+    if (text.endsWith(")")) {
+      text = text.substring(0, text.length() - 1);
+    }
+
+    return text;
+  }
 }

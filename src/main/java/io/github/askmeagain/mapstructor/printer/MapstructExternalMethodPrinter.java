@@ -1,20 +1,19 @@
 package io.github.askmeagain.mapstructor.printer;
 
-import com.intellij.psi.PsiElement;
 import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
 import io.github.askmeagain.mapstructor.entities.MapstructExternalMethodEntity;
-import io.github.askmeagain.mapstructor.entities.VariableWithNameEntity;
 
 import java.util.stream.Collectors;
 
+import static io.github.askmeagain.mapstructor.services.MapstructorUtils.removeBrackets;
 import static io.github.askmeagain.mapstructor.services.MapstructorUtils.toPascalCase;
 
 public class MapstructExternalMethodPrinter {
 
-  private static final String MAPSTRUCT_METHOD = "\n\t@Named(\"$METHOD_NAME\")\n" +
-      "\tdefault $OUTPUT_TYPE $METHOD_NAME($PARAMS){\n" +
-      "\t\treturn $METHOD_BODY;\n" +
-      "\t}\n\n";
+  private static final String MAPSTRUCT_METHOD = "\n  @Named(\"$METHOD_NAME\")\n" +
+      "  default $OUTPUT_TYPE $METHOD_NAME($PARAMS) {\n" +
+      "    return $METHOD_BODY;\n" +
+      "  }\n\n";
 
   public static String print(MapStructMapperEntity entity) {
     return entity.getExternalMethodEntities()
@@ -32,9 +31,8 @@ public class MapstructExternalMethodPrinter {
         .replace("$OUTPUT_TYPE", outputType.getPresentableText())
         .replace("$METHOD_NAME", methodName)
         .replace("$PARAMS", container.getInputParams().stream()
-            .map(VariableWithNameEntity::getName)
-            .map(PsiElement::getText)
+            .map(x -> x.getType().getPresentableText() + " " + x.getName().getText())
             .collect(Collectors.joining(", ")))
-        .replace("$METHOD_BODY", container.getMethodBody().getText());
+        .replace("$METHOD_BODY", removeBrackets(container.getMethodBody().getText()));
   }
 }

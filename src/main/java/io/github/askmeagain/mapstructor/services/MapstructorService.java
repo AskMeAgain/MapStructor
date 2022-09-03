@@ -71,16 +71,17 @@ public class MapstructorService {
               .methodBody(mapping.getSource())
               .target(mapping.getTarget())
               .outputType(realInstance.getMethodExpression().getType())
-              .inputParams(findExternalMethodExpressionType(mapping))
+              .inputParams(findExternalMethodInputTypes(mapping))
               .build();
           entity.getExternalMethodEntities().add(externalMethod);
           mapping.setExternalMethod(true);
+          mapping.setExternalMethodEntity(externalMethod);
         }
       }
     }
   }
 
-  private List<VariableWithNameEntity> findExternalMethodExpressionType(MapstructMethodEntity.TargetSourceContainer mapping) {
+  private List<VariableWithNameEntity> findExternalMethodInputTypes(MapstructMethodEntity.TargetSourceContainer mapping) {
     return FindInputsVisitor.find(mapping.getSource(), psiFile)
         .stream()
         .map(x -> VariableWithNameEntity.builder()

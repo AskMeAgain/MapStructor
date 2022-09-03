@@ -46,8 +46,10 @@ public class MapstructMappingPrinter {
     var qualifiedText = "";
     if (isExternalMethod) {
       var methodName = "map" + toPascalCase(mapping.getTarget());
-      qualifiedText = ", qualifiedByName=\"" + methodName + "\"";
-      sourceText = "";
+      qualifiedText = ", qualifiedByName = \"" + methodName + "\"";
+      sourceText = mapping.getExternalMethodEntity().getInputParams().stream()
+          .map(x -> x.getName().getText())
+          .collect(Collectors.joining(", "));
     }
 
     return MAPSTRUCT_MAPPING_TEMPLATE

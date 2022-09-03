@@ -54,10 +54,9 @@ public class MapstructMethodEntity {
 
     MapstructMethodEntity refToOtherMapping;
 
-    List<VariableWithNameEntity> expressionInputParameters;
-    PsiType expressionOutputType;
-
     boolean isExternalMethod;
+
+    MapstructExternalMethodEntity externalMethodEntity;
   }
 
 }

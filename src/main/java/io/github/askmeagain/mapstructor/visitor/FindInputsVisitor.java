@@ -17,8 +17,10 @@ public class FindInputsVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitReferenceExpression(PsiReferenceExpression expression) {
-    found.add(expression);
-    super.visitReferenceExpression(expression);
+    if (expression.getParent() instanceof PsiMethodCallExpression) {
+    } else {
+      found.add(expression);
+    }
   }
 
   public static List<PsiReferenceExpression> find(PsiElement element, PsiFile psiFile) {
