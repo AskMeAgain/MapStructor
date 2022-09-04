@@ -21,7 +21,7 @@ public class SimpleTest extends AbstractTestBase {
   @SneakyThrows
   void mappingTest(String input1, String input2) {
     var output = mappingResult(input1, input2);
-    var result = TestMapper.INSTANCE.mapOutput1(input1, input2);
+    var result = TestMapper.INSTANCE.mapOutput1(input2, input1);
 
     assertThat(output)
         .usingRecursiveComparison()

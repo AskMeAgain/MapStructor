@@ -29,5 +29,4 @@ public interface TestMapper {
   default String mapNested1(String abc) {
     return "1" + (2 * 3) + "3" + abc;
   }
-
 }

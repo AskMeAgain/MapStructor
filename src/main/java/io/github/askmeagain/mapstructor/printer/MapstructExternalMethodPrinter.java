@@ -19,6 +19,7 @@ public class MapstructExternalMethodPrinter {
   public static String print(MapStructMapperEntity entity) {
     return entity.getExternalMethodEntities()
         .stream()
+        .filter(x -> !x.getInputParams().isEmpty())
         .map(MapstructExternalMethodPrinter::psiElementToMethod)
         .collect(Collectors.joining("\n"));
   }
