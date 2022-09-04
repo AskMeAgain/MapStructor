@@ -1,45 +1,38 @@
 package io.github.askmeagain.mapstructor.iteration;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiLiteralExpression;
-import com.intellij.psi.PsiReferenceExpression;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.PsiFile;
 import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
 import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
 import io.github.askmeagain.mapstructor.entities.VariableWithNameEntity;
+import io.github.askmeagain.mapstructor.visitor.FindInputsVisitor;
+import io.github.askmeagain.mapstructor.visitor.FindTypeVisitor;
+import lombok.RequiredArgsConstructor;
 
+import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 public class CalcInputIteration implements Iteration {
+
+  private final PsiFile psiFile;
+
   @Override
   public void accept(MapStructMapperEntity entity) {
     for (var method : entity.getMappings()) {
       var collect = method.getMappings().stream()
           .map(MapstructMethodEntity.TargetSourceContainer::getSource)
-          .map(this::findInputs)
+          .map(element -> FindInputsVisitor.find(element, psiFile))
           .filter(Objects::nonNull)
+          .flatMap(Collection::stream)
+          .map(x -> VariableWithNameEntity.builder()
+              .name(x)
+              .type(FindTypeVisitor.find(psiFile, x))
+              .build())
           .collect(Collectors.toList());
 
       method.getInputs().addAll(collect);
     }
-  }
-
-  private VariableWithNameEntity findInputs(PsiElement element) {
-
-    if (PsiTreeUtil.getChildOfType(element, PsiLiteralExpression.class) != null) {
-      return null; //no inputs
-    }
-
-    var psiReferenceExpression = PsiTreeUtil.getChildOfType(element, PsiReferenceExpression.class);
-    if (psiReferenceExpression != null) {
-      return VariableWithNameEntity.builder()
-          .type(psiReferenceExpression.getType())
-          .name(psiReferenceExpression)
-          .build();
-    }
-
-    return null;
   }
 
 }

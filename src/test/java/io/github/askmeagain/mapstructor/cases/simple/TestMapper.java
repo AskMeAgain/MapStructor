@@ -19,13 +19,13 @@ public interface TestMapper {
 
   @Mapping(target = "input1", constant = "test")
   @Mapping(target = "input5", constant = "abc")
-  @Mapping(target = "nestedThings", expression = "java(mapOutput2(a, b))")
-  Output1 mapOutput1(String a, String b);
+  @Mapping(target = "nestedThings", expression = "java(mapOutput2(b, a))")
+  Output1 mapOutput1(String b, String a);
 
   @Mapping(target = "nested1", constant = "1")
   @Mapping(target = "nested2", constant = "1")
   @Mapping(target = "outerVariable", source = "a")
   @Mapping(target = "superNestedObject", source = "b")
-  Output2 mapOutput2(String a, String b);
+  Output2 mapOutput2(String b, String a);
 
 }

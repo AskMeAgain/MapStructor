@@ -22,7 +22,7 @@ public class MapstructorService {
     this.psiFile = psiFile;
     this.mapperName = mapperName;
     this.iterations = List.of(
-        new CalcInputIteration(),
+        new CalcInputIteration(psiFile),
         new MapOutsideReferenceIteration(psiFile),
         new RefMappingIteration(psiFile),
         new ExternalMethodIteration(psiFile)

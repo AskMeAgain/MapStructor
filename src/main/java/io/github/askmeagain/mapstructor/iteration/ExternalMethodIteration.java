@@ -55,7 +55,7 @@ public class ExternalMethodIteration implements Iteration {
     var methodRef = PsiTreeUtil.getChildOfType(mapping.getSource(), PsiMethodCallExpression.class);
 
     //needs to be static import
-    if (!methodRef.getText().contains(".")) {
+    if (methodRef != null && !methodRef.getText().contains(".")) {
       var method = FindMethodCallExpressionVisitor.find(methodRef, psiFile);
       var parent = PsiTreeUtil.getParentOfType(method, PsiClass.class);
       entity.getStaticImports().add(parent.getQualifiedName() + "." + getMethodName(methodRef.getText()));

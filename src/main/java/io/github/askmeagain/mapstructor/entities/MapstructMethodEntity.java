@@ -21,7 +21,7 @@ public class MapstructMethodEntity {
   private PsiType outputType;
 
   @Builder.Default
-  private List<VariableWithNameEntity> inputs = new ArrayList<>();
+  private Set<VariableWithNameEntity> inputs = new HashSet<>();
 
   public List<VariableWithNameEntity> calculateDeepInputs() {
 

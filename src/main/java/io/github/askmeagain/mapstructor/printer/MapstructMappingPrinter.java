@@ -3,6 +3,7 @@ package io.github.askmeagain.mapstructor.printer;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
+import io.github.askmeagain.mapstructor.services.MapstructorUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.stream.Collectors;
@@ -22,8 +23,7 @@ public class MapstructMappingPrinter {
     var hasExpression = false;
     var isExternalMethod = mapping.isExternalMethod();
 
-    var stripLeft = StringUtils.strip(mapping.getSource().getText(), "(");
-    var sourceText = StringUtils.strip(stripLeft, ")");
+    var sourceText = StringUtils.strip(StringUtils.strip(mapping.getSource().getText(), "("), ")");
     var expressionText = "";
 
     if (mapping.getRefToOtherMapping() != null) {
@@ -46,10 +46,19 @@ public class MapstructMappingPrinter {
     var qualifiedText = "";
     if (isExternalMethod) {
       var methodName = "map" + toPascalCase(mapping.getTarget());
-      qualifiedText = ", qualifiedByName = \"" + methodName + "\"";
-      sourceText = mapping.getExternalMethodEntity().getInputParams().stream()
-          .map(x -> x.getName().getText())
-          .collect(Collectors.joining(", "));
+
+      var inputParams = mapping.getExternalMethodEntity().getInputParams();
+      if (inputParams.isEmpty()) {
+        hasSource = false;
+        isExternalMethod = false;
+        hasExpression = true;
+        expressionText = MapstructorUtils.removeBrackets(mapping.getSource().getText());
+      } else {
+        qualifiedText = ", qualifiedByName = \"" + methodName + "\"";
+        sourceText = inputParams.stream()
+            .map(x -> x.getName().getText())
+            .collect(Collectors.joining(", "));
+      }
     }
 
     return MAPSTRUCT_MAPPING_TEMPLATE

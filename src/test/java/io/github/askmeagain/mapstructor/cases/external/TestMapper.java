@@ -17,7 +17,7 @@ public interface TestMapper {
   Output1 mapOutput1(String abc);
 
   @Mapping(target = "nested1", source = "abc", qualifiedByName = "mapNested1")
-  @Mapping(target = "nested2", source = "abc")
+  @Mapping(target = "nested2", expression = "java(ExternalMappingTest.methodWithNoInput())")
   Output2 mapOutput2(String abc);
 
   @Named("mapInput1")
@@ -29,4 +29,5 @@ public interface TestMapper {
   default String mapNested1(String abc) {
     return "1" + (2 * 3) + "3" + abc;
   }
+
 }
