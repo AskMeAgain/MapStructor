@@ -12,6 +12,8 @@ import java.util.stream.Stream;
 
 public class MapstructImportPrinter {
 
+  private static final String TEMPLATE = "$NORMAL_IMPORTS$STATIC_IMPORTS";
+
   public static String print(MapStructMapperEntity entity) {
     var stream = Stream.of(
         "org.mapstruct.Mapper",
@@ -32,7 +34,7 @@ public class MapstructImportPrinter {
         .map(VariableWithNameEntity::getType)
         .map(PsiType::getCanonicalText);
 
-    return Stream.of(stream, collectedImportStream, another, stringStream)
+    var normalImports = Stream.of(stream, collectedImportStream, another, stringStream)
         .flatMap(Function.identity())
         .distinct()
         .filter(x -> !x.startsWith("java.lang"))
@@ -40,5 +42,13 @@ public class MapstructImportPrinter {
         .sorted()
         .map(x -> "import " + x + ";")
         .collect(Collectors.joining("\n"));
+
+    var staticImports = "\n\n" + entity.getStaticImports()
+        .stream()
+        .map(x -> "import static " + x + ";")
+        .collect(Collectors.joining("\n"));
+
+    return TEMPLATE.replace("$NORMAL_IMPORTS", normalImports)
+        .replace("$STATIC_IMPORTS", entity.getStaticImports().isEmpty() ? "" : staticImports);
   }
 }

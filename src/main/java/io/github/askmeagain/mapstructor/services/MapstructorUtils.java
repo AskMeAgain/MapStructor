@@ -20,6 +20,10 @@ public class MapstructorUtils {
     return matcher.find();
   }
 
+  public static String getMethodName(String methodName){
+    return methodName.substring(0, methodName.indexOf("("));
+  }
+
   public static String extractSetterName(String expression) {
 
     var dotIndex = expression.indexOf(".set");

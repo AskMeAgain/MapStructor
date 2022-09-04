@@ -22,5 +22,8 @@ public class MapStructMapperEntity {
   List<PsiType> imports;
 
   @Builder.Default
+  List<String> staticImports = new ArrayList<>();
+
+  @Builder.Default
   List<MapstructExternalMethodEntity> externalMethodEntities = new ArrayList<>();
 }

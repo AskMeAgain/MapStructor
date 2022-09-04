@@ -1,14 +1,13 @@
-package io.github.askmeagain.mapstructor.cases.external;
+package io.github.askmeagain.mapstructor.cases.staticimport;
 
 import io.github.askmeagain.mapstructor.common.AbstractTestBase;
 import io.github.askmeagain.mapstructor.entities.Output1;
-import io.github.askmeagain.mapstructor.entities.Output2;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ExternalMappingTest extends AbstractTestBase {
+public class StaticImportTest extends AbstractTestBase {
 
   @ParameterizedTest
   @CsvSource({"abc", "def"})
@@ -24,23 +23,15 @@ public class ExternalMappingTest extends AbstractTestBase {
   private Output1 mapper(String abc) {
     //<selection>
     var output = new Output1();
-    var output2 = new Output2();
 
-    output2.setNested1("1" + (2 * 3) + "3" + abc);
-    output2.setNested2(ExternalMappingTest.methodWithNoInput());
-
-    output.setInput1(ExternalMappingTest.thisIsAMethod(abc));
-    output.setNestedThings(output2);
+    output.setInput1(thisIsAStaticMethod(abc));
+    output.setInput2(abc);
 
     return output;
     //</selection>
   }
 
-  public static String thisIsAMethod(String whatANiceInput) {
+  public static String thisIsAStaticMethod(String whatANiceInput) {
     return "test" + whatANiceInput;
-  }
-
-  public static String methodWithNoInput(){
-    return "abc";
   }
 }

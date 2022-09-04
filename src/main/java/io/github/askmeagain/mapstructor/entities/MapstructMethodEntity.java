@@ -57,6 +57,7 @@ public class MapstructMethodEntity {
     boolean isExternalMethod;
 
     MapstructExternalMethodEntity externalMethodEntity;
+
   }
 
 }

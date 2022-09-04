@@ -1,9 +1,6 @@
 package io.github.askmeagain.mapstructor.iteration;
 
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiMethodCallExpression;
-import com.intellij.psi.PsiPolyadicExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
 import io.github.askmeagain.mapstructor.entities.MapstructExternalMethodEntity;
@@ -16,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static io.github.askmeagain.mapstructor.services.MapstructorUtils.getMethodName;
 
 @RequiredArgsConstructor
 public class ExternalMethodIteration implements Iteration {
@@ -52,6 +51,15 @@ public class ExternalMethodIteration implements Iteration {
     entity.getExternalMethodEntities().add(externalMethod);
     mapping.setExternalMethod(true);
     mapping.setExternalMethodEntity(externalMethod);
+
+    var methodRef = PsiTreeUtil.getChildOfType(mapping.getSource(), PsiMethodCallExpression.class);
+
+    //needs to be static import
+    if (!methodRef.getText().contains(".")) {
+      var method = FindMethodCallExpressionVisitor.find(methodRef, psiFile);
+      var parent = PsiTreeUtil.getParentOfType(method, PsiClass.class);
+      entity.getStaticImports().add(parent.getQualifiedName() + "." + getMethodName(methodRef.getText()));
+    }
   }
 
   private List<VariableWithNameEntity> findExternalMethodInputTypes(MapstructMethodEntity.TargetSourceContainer mapping) {
