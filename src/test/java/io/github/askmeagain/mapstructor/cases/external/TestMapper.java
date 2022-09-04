@@ -8,9 +8,9 @@ import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface SimpleMapper {
+public interface TestMapper {
 
-  SimpleMapper INSTANCE = Mappers.getMapper(SimpleMapper.class);
+  TestMapper INSTANCE = Mappers.getMapper(TestMapper.class);
 
   @Mapping(target = "input1", source = "abc", qualifiedByName = "mapInput1")
   @Mapping(target = "nestedThings", source = "abc")

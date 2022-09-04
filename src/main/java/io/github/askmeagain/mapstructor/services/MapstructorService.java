@@ -3,10 +3,10 @@ package io.github.askmeagain.mapstructor.services;
 import com.intellij.psi.PsiClassOwner;
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiFile;
+import io.github.askmeagain.mapstructor.iteration.*;
 import io.github.askmeagain.mapstructor.entities.BasicMapping;
 import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
 import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
-import io.github.askmeagain.mapstructor.services.iteration.*;
 import io.github.askmeagain.mapstructor.visitor.MappingVisitor;
 
 import java.util.List;
@@ -16,9 +16,11 @@ public class MapstructorService {
 
   private final PsiFile psiFile;
   private final List<Iteration> iterations;
+  private final String mapperName;
 
-  public MapstructorService(PsiFile psiFile) {
+  public MapstructorService(PsiFile psiFile, String mapperName) {
     this.psiFile = psiFile;
+    this.mapperName = mapperName;
     this.iterations = List.of(
         new CalcInputIteration(),
         new MapOutsideReferenceIteration(psiFile),
@@ -51,7 +53,7 @@ public class MapstructorService {
     var packageName = ((PsiClassOwner) psiFile).getPackageName();
 
     var mapstructEntity = MapStructMapperEntity.builder()
-        .mapperName("SimpleMapper")
+        .mapperName(mapperName)
         .packageName(packageName)
         .mappings(result)
         .build();

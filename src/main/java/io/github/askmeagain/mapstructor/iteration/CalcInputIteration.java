@@ -1,4 +1,4 @@
-package io.github.askmeagain.mapstructor.services.iteration;
+package io.github.askmeagain.mapstructor.iteration;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLiteralExpression;
@@ -7,7 +7,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
 import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
 import io.github.askmeagain.mapstructor.entities.VariableWithNameEntity;
-import io.github.askmeagain.mapstructor.services.Iteration;
 
 import java.util.Objects;
 import java.util.stream.Collectors;

@@ -14,7 +14,7 @@ public class ExternalMappingTest extends AbstractTestBase {
   @CsvSource({"abc", "def"})
   void mappingTest(String input) {
     var output = mapper(input);
-    var result = SimpleMapper.INSTANCE.mapOutput1(input);
+    var result = TestMapper.INSTANCE.mapOutput1(input);
 
     assertThat(output)
         .usingRecursiveComparison()

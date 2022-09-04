@@ -1,4 +1,4 @@
-package io.github.askmeagain.mapstructor.services;
+package io.github.askmeagain.mapstructor.iteration;
 
 import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
 

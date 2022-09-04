@@ -1,11 +1,10 @@
-package io.github.askmeagain.mapstructor.services.iteration;
+package io.github.askmeagain.mapstructor.iteration;
 
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
 import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
-import io.github.askmeagain.mapstructor.services.Iteration;
 import io.github.askmeagain.mapstructor.visitor.FindTypeVisitor;
 import lombok.RequiredArgsConstructor;
 
