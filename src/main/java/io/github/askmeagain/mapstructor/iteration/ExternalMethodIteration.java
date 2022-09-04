@@ -69,6 +69,7 @@ public class ExternalMethodIteration implements Iteration {
             .type(FindTypeVisitor.find(psiFile, x))
             .name(x)
             .build())
+        .sorted()
         .collect(Collectors.toList());
   }
 }
