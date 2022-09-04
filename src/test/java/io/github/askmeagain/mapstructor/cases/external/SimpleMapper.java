@@ -1,4 +1,4 @@
-package io.github.askmeagain.mapstructor.cases.simple2;
+package io.github.askmeagain.mapstructor.cases.external;
 
 import io.github.askmeagain.mapstructor.entities.Output1;
 import io.github.askmeagain.mapstructor.entities.Output2;
@@ -22,7 +22,7 @@ public interface SimpleMapper {
 
   @Named("mapInput1")
   default String mapInput1(String abc) {
-    return MethodMappingTest.thisIsAMethod(abc);
+    return ExternalMappingTest.thisIsAMethod(abc);
   }
 
   @Named("mapNested1")

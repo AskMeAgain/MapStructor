@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 public class MapstructorUtils {
 
-  public static String getInput(VariableWithNameEntity variableWithNameEntity) {
+  public static String printVariableWithName(VariableWithNameEntity variableWithNameEntity) {
     return variableWithNameEntity.getType().getPresentableText() + " " + variableWithNameEntity.getName().getText();
   }
 

@@ -1,22 +1,31 @@
 package io.github.askmeagain.mapstructor.services;
 
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
-import io.github.askmeagain.mapstructor.entities.*;
-import io.github.askmeagain.mapstructor.visitor.FindInputsVisitor;
-import io.github.askmeagain.mapstructor.visitor.FindMethodCallExpressionVisitor;
-import io.github.askmeagain.mapstructor.visitor.FindTypeVisitor;
+import com.intellij.psi.PsiClassOwner;
+import com.intellij.psi.PsiCodeBlock;
+import com.intellij.psi.PsiFile;
+import io.github.askmeagain.mapstructor.entities.BasicMapping;
+import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
+import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
+import io.github.askmeagain.mapstructor.services.iteration.*;
 import io.github.askmeagain.mapstructor.visitor.MappingVisitor;
-import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 public class MapstructorService {
 
   private final PsiFile psiFile;
+  private final List<Iteration> iterations;
+
+  public MapstructorService(PsiFile psiFile) {
+    this.psiFile = psiFile;
+    this.iterations = List.of(
+        new CalcInputIteration(),
+        new MapOutsideReferenceIteration(psiFile),
+        new RefMappingIteration(psiFile),
+        new ExternalMethodIteration(psiFile)
+    );
+  }
 
   public MapStructMapperEntity calculate(PsiCodeBlock codeBlock) {
 
@@ -47,131 +56,10 @@ public class MapstructorService {
         .mappings(result)
         .build();
 
-    calcInputs(mapstructEntity);
-
-    findOutsideInputs(mapstructEntity);
-
-    //we need to find reference mappings
-    findRefMappings(mapstructEntity);
-
-    findExternalMethods(mapstructEntity);
+    //compute all needed data
+    iterations.forEach(iteration -> iteration.accept(mapstructEntity));
 
     return mapstructEntity;
   }
 
-  private void findExternalMethods(MapStructMapperEntity entity) {
-
-    for (var method : entity.getMappings()) {
-      for (var mapping : method.getMappings()) {
-        var methodCallExpression = PsiTreeUtil.getChildOfType(mapping.getSource(), PsiMethodCallExpression.class);
-        var polyadicExpression = PsiTreeUtil.getChildOfType(mapping.getSource(),PsiPolyadicExpression.class);
-
-        if (methodCallExpression != null) {
-          var realInstance = FindMethodCallExpressionVisitor.find(methodCallExpression, psiFile);
-          var type = realInstance.getMethodExpression().getType();
-          extracted(entity, mapping, type);
-        }
-        if(polyadicExpression != null){
-          var type = polyadicExpression.getType();
-          extracted(entity, mapping, type);
-        }
-      }
-    }
-  }
-
-  private void extracted(MapStructMapperEntity entity, MapstructMethodEntity.TargetSourceContainer mapping, PsiType type) {
-    var externalMethod = MapstructExternalMethodEntity.builder()
-        .methodBody(mapping.getSource())
-        .target(mapping.getTarget())
-        .outputType(type)
-        .inputParams(findExternalMethodInputTypes(mapping))
-        .build();
-    entity.getExternalMethodEntities().add(externalMethod);
-    mapping.setExternalMethod(true);
-    mapping.setExternalMethodEntity(externalMethod);
-  }
-
-  private List<VariableWithNameEntity> findExternalMethodInputTypes(MapstructMethodEntity.TargetSourceContainer mapping) {
-    return FindInputsVisitor.find(mapping.getSource(), psiFile)
-        .stream()
-        .map(x -> VariableWithNameEntity.builder()
-            .type(FindTypeVisitor.find(psiFile, x))
-            .name(x)
-            .build())
-        .collect(Collectors.toList());
-  }
-
-  private void findRefMappings(MapStructMapperEntity entity) {
-
-    for (var method : entity.getMappings()) {
-      var newMappings = method.getMappings().stream()
-          .map(this::calcRefTarget)
-          .collect(Collectors.toList());
-
-      method.setMappings(newMappings);
-    }
-
-    for (var method : entity.getMappings()) {
-      for (var mapping : method.getMappings()) {
-        for (var outputType : entity.getMappings()) {
-          if (outputType.getOutputType().equals(mapping.getRefTargetType())) {
-            mapping.setRefToOtherMapping(outputType);
-            break;
-          }
-        }
-      }
-    }
-  }
-
-  private MapstructMethodEntity.TargetSourceContainer calcRefTarget(MapstructMethodEntity.TargetSourceContainer sourceContainer) {
-
-    var element = sourceContainer.getSource();
-
-    var ref = PsiTreeUtil.getChildOfType(element, PsiReferenceExpression.class);
-
-    if (ref != null) {
-      var type = FindTypeVisitor.find(psiFile, ref);
-      return sourceContainer.withRefTargetType(type);
-    }
-    return sourceContainer;
-  }
-
-  private void findOutsideInputs(MapStructMapperEntity result) {
-    for (var method : result.getMappings()) {
-      for (var input : method.getInputs()) {
-        var type = FindTypeVisitor.find(psiFile, input.getName());
-        input.setType(type);
-      }
-    }
-  }
-
-  private void calcInputs(MapStructMapperEntity result) {
-
-    for (var method : result.getMappings()) {
-      var collect = method.getMappings().stream()
-          .map(MapstructMethodEntity.TargetSourceContainer::getSource)
-          .map(this::findInputs)
-          .filter(Objects::nonNull)
-          .collect(Collectors.toList());
-
-      method.getInputs().addAll(collect);
-    }
-  }
-
-  private VariableWithNameEntity findInputs(PsiElement element) {
-
-    if (PsiTreeUtil.getChildOfType(element, PsiLiteralExpression.class) != null) {
-      return null; //no inputs
-    }
-
-    var psiReferenceExpression = PsiTreeUtil.getChildOfType(element, PsiReferenceExpression.class);
-    if (psiReferenceExpression != null) {
-      return VariableWithNameEntity.builder()
-          .type(psiReferenceExpression.getType())
-          .name(psiReferenceExpression)
-          .build();
-    }
-
-    return null;
-  }
 }

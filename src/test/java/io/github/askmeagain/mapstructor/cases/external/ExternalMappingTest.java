@@ -1,4 +1,4 @@
-package io.github.askmeagain.mapstructor.cases.simple2;
+package io.github.askmeagain.mapstructor.cases.external;
 
 import io.github.askmeagain.mapstructor.common.AbstractTestBase;
 import io.github.askmeagain.mapstructor.entities.Output1;
@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class MethodMappingTest extends AbstractTestBase {
+public class ExternalMappingTest extends AbstractTestBase {
 
   @ParameterizedTest
   @CsvSource({"abc", "def"})
@@ -29,7 +29,7 @@ public class MethodMappingTest extends AbstractTestBase {
     output2.setNested1("1" + (2 * 3) + "3" + abc);
     output2.setNested2(abc);
 
-    output.setInput1(MethodMappingTest.thisIsAMethod(abc));
+    output.setInput1(ExternalMappingTest.thisIsAMethod(abc));
     output.setNestedThings(output2);
 
     return output;

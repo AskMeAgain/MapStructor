@@ -19,7 +19,7 @@ public class MapstructMethodPrinter {
                 .collect(Collectors.joining("\n")))
             .replace("$OUTPUT_TYPE", method.getOutputType().getPresentableText())
             .replace("$PARAMS", method.calculateDeepInputs().stream()
-                .map(MapstructorUtils::getInput)
+                .map(MapstructorUtils::printVariableWithName)
                 .collect(Collectors.joining(", "))))
         .collect(Collectors.joining("\n"));
   }

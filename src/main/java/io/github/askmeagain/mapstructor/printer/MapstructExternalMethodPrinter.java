@@ -2,6 +2,7 @@ package io.github.askmeagain.mapstructor.printer;
 
 import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
 import io.github.askmeagain.mapstructor.entities.MapstructExternalMethodEntity;
+import io.github.askmeagain.mapstructor.services.MapstructorUtils;
 
 import java.util.stream.Collectors;
 
@@ -31,7 +32,7 @@ public class MapstructExternalMethodPrinter {
         .replace("$OUTPUT_TYPE", outputType.getPresentableText())
         .replace("$METHOD_NAME", methodName)
         .replace("$PARAMS", container.getInputParams().stream()
-            .map(x -> x.getType().getPresentableText() + " " + x.getName().getText())
+            .map(MapstructorUtils::printVariableWithName)
             .collect(Collectors.joining(", ")))
         .replace("$METHOD_BODY", removeBrackets(container.getMethodBody().getText()));
   }
