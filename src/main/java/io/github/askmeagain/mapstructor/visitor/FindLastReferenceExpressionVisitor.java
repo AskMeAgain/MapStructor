@@ -15,7 +15,7 @@ public class FindLastReferenceExpressionVisitor extends JavaRecursiveElementVisi
 
   @Override
   public void visitReferenceExpression(PsiReferenceExpression expression) {
-    if (expression.getType() != null && lastPsiType == null) {
+    if (!expression.getText().contains(".") && lastPsiType == null) {
       lastPsiType = FindTypeVisitor.find(psiFile, expression);
     }
     super.visitReferenceExpression(expression);

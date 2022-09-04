@@ -28,7 +28,7 @@ public class SimpleTest extends AbstractTestBase {
         .isEqualTo(result);
   }
 
-  private static Output1 mappingResult(String b, String a) {
+  private static Output1 mappingResult(String a, String b) {
 
     //<selection>
     var output = new Output1();
