@@ -16,6 +16,7 @@ public class MapstructMethodPrinter {
           var variableWithNameEntities = method.calculateDeepInputs();
           return MAPSTRUCT_MAPPING_METHOD
               .replace("$MAPPING_LIST", method.getMappings().stream()
+                  .sorted()
                   .map(MapstructMappingPrinter::print)
                   .collect(Collectors.joining("\n")))
               .replace("$OUTPUT_TYPE", method.getOutputType().getPresentableText())

@@ -18,4 +18,5 @@ public interface TestMapper {
   @Mapping(target = "nested1", source = "abc")
   @Mapping(target = "nested2", source = "abc")
   Output2 mapOutput2(String abc);
+
 }

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.With;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -45,7 +46,7 @@ public class MapstructMethodEntity {
 
   @Data
   @Builder
-  public static class TargetSourceContainer {
+  public static class TargetSourceContainer implements Comparable<TargetSourceContainer> {
 
     PsiElement source;
     String target;
@@ -58,6 +59,10 @@ public class MapstructMethodEntity {
 
     MapstructExternalMethodEntity externalMethodEntity;
 
+    @Override
+    public int compareTo(@NotNull MapstructMethodEntity.TargetSourceContainer o) {
+      return target.compareTo(o.getTarget());
+    }
   }
 
 }

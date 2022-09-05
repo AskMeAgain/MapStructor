@@ -1,6 +1,7 @@
 package io.github.askmeagain.mapstructor.visitor;
 
 import com.intellij.psi.*;
+import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.askmeagain.mapstructor.entities.BasicMapping;
 import io.github.askmeagain.mapstructor.services.MapstructorUtils;
@@ -8,8 +9,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static io.github.askmeagain.mapstructor.services.MapstructorUtils.extractSetterName;
 
@@ -20,7 +21,7 @@ public class MappingVisitor extends JavaRecursiveElementVisitor {
   private final int end;
 
   @Getter
-  private final List<BasicMapping> mappingList = new ArrayList<>();
+  private final Set<BasicMapping> mappingList = new HashSet<>();
 
   @Override
   public void visitMethodCallExpression(PsiMethodCallExpression expression) {
@@ -30,6 +31,7 @@ public class MappingVisitor extends JavaRecursiveElementVisitor {
     }
 
     super.visitCallExpression(expression);
+
     //is setter
     if (MapstructorUtils.matchesRegex(".*\\.set.*\\(.*\\)", expression.getText())) {
       var parentType = PsiTreeUtil.getChildOfType(expression.getChildren()[0], PsiReferenceExpression.class).getType();
@@ -41,10 +43,16 @@ public class MappingVisitor extends JavaRecursiveElementVisitor {
           .build();
 
       mappingList.add(mapping);
+    } else if (MapstructorUtils.matchesRegex(".*\\.builder\\(\\).*", expression.getText())) {
+      var parentType = ((PsiReferenceExpressionImpl) expression.getChildren()[0]).getType();
+      var visitor = new LombokVisitor(parentType);
+      expression.accept(visitor);
+      var mappings = visitor.getMappings();
+      mappingList.addAll(mappings);
     }
   }
 
-  public static List<BasicMapping> find(PsiFile psiFile, int start, int end) {
+  public static Set<BasicMapping> find(PsiFile psiFile, int start, int end) {
     var visitor = new MappingVisitor(start, end);
     psiFile.accept(visitor);
     return visitor.getMappingList();
