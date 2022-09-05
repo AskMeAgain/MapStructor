@@ -5,7 +5,6 @@ import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
 import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
-import io.github.askmeagain.mapstructor.visitor.FindTypeVisitor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.stream.Collectors;
@@ -44,8 +43,7 @@ public class RefMappingIteration implements Iteration {
     var ref = PsiTreeUtil.getChildOfType(element, PsiReferenceExpression.class);
 
     if (ref != null) {
-      var type = FindTypeVisitor.find(psiFile, ref);
-      return sourceContainer.withRefTargetType(type);
+      return sourceContainer.withRefTargetType(ref.getType());
     }
     return sourceContainer;
   }

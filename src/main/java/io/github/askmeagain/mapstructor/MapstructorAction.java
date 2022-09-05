@@ -5,7 +5,6 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.psi.impl.PsiJavaParserFacadeImpl;
 import groovy.util.logging.Slf4j;
 import io.github.askmeagain.mapstructor.gui.MapperNameDialog;
 import io.github.askmeagain.mapstructor.printer.MapstructMapperPrinter;
@@ -33,17 +32,11 @@ public class MapstructorAction extends AnAction {
     var data = e.getData(PlatformDataKeys.VIRTUAL_FILE);
     var psiFile = e.getData(PlatformDataKeys.PSI_FILE);
 
-    var psiJavaParserFacade = new PsiJavaParserFacadeImpl(project);
-
     String finalMapperName = mapperName;
 
     editor.getCaretModel().runForEachCaret(caret -> {
 
-      var selectedText = caret.getSelectedText();
-
-      var codeBlock = psiJavaParserFacade.createCodeBlockFromText("{" + selectedText + "}", psiFile);
-
-      var result = new MapstructorService(psiFile, finalMapperName).calculate(codeBlock);
+      var result = new MapstructorService(psiFile, finalMapperName).calculate(caret.getSelectionStart(), caret.getSelectionEnd());
 
       var printResult = MapstructMapperPrinter.print(result);
 

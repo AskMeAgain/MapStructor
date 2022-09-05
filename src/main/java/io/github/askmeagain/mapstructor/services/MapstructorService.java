@@ -1,12 +1,11 @@
 package io.github.askmeagain.mapstructor.services;
 
 import com.intellij.psi.PsiClassOwner;
-import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiFile;
-import io.github.askmeagain.mapstructor.iteration.*;
 import io.github.askmeagain.mapstructor.entities.BasicMapping;
 import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
 import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
+import io.github.askmeagain.mapstructor.iteration.*;
 import io.github.askmeagain.mapstructor.visitor.MappingVisitor;
 
 import java.util.List;
@@ -22,16 +21,16 @@ public class MapstructorService {
     this.psiFile = psiFile;
     this.mapperName = mapperName;
     this.iterations = List.of(
-        new CalcInputIteration(psiFile),
-        new MapOutsideReferenceIteration(psiFile),
+        new CalcInputIteration(),
+        new MapOutsideReferenceIteration(),
         new RefMappingIteration(psiFile),
         new ExternalMethodIteration(psiFile)
     );
   }
 
-  public MapStructMapperEntity calculate(PsiCodeBlock codeBlock) {
+  public MapStructMapperEntity calculate(int start, int end) {
 
-    var straightMappingList = MappingVisitor.find(codeBlock, psiFile);
+    var straightMappingList = MappingVisitor.find(psiFile, start, end);
 
     var dividedByParent = straightMappingList.stream()
         .collect(Collectors.groupingBy(BasicMapping::getParent));

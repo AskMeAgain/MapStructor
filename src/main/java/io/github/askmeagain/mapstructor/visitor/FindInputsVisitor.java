@@ -10,8 +10,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FindInputsVisitor extends JavaRecursiveElementVisitor {
 
-  private final PsiFile psiFile;
-
   @Getter
   private final List<PsiReferenceExpression> found = new ArrayList<>();
 
@@ -23,8 +21,8 @@ public class FindInputsVisitor extends JavaRecursiveElementVisitor {
     }
   }
 
-  public static List<PsiReferenceExpression> find(PsiElement element, PsiFile psiFile) {
-    var instance = new FindInputsVisitor(psiFile);
+  public static List<PsiReferenceExpression> find(PsiElement element) {
+    var instance = new FindInputsVisitor();
     element.accept(instance);
     return instance.getFound();
   }

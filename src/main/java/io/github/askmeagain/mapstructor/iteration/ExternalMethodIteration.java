@@ -8,7 +8,6 @@ import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
 import io.github.askmeagain.mapstructor.entities.VariableWithNameEntity;
 import io.github.askmeagain.mapstructor.visitor.FindInputsVisitor;
 import io.github.askmeagain.mapstructor.visitor.FindMethodCallExpressionVisitor;
-import io.github.askmeagain.mapstructor.visitor.FindTypeVisitor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -63,10 +62,10 @@ public class ExternalMethodIteration implements Iteration {
   }
 
   private List<VariableWithNameEntity> findExternalMethodInputTypes(MapstructMethodEntity.TargetSourceContainer mapping) {
-    return FindInputsVisitor.find(mapping.getSource(), psiFile)
+    return FindInputsVisitor.find(mapping.getSource())
         .stream()
         .map(x -> VariableWithNameEntity.builder()
-            .type(FindTypeVisitor.find(psiFile, x))
+            .type(x.getType())
             .name(x)
             .build())
         .sorted()
