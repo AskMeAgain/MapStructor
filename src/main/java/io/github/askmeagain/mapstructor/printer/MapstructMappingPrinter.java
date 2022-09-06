@@ -28,9 +28,10 @@ public class MapstructMappingPrinter {
 
     if (mapping.getRefToOtherMapping() != null) {
       var inputs = mapping.getRefToOtherMapping().calculateDeepInputs();
-
+      isExternalMethod = false;
       if (inputs.size() == 1) {
         hasSource = true;
+        hasExpression = false;
         sourceText = inputs.stream()
             .map(x -> x.getName().getText())
             .collect(Collectors.joining(""));

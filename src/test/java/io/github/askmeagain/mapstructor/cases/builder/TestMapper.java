@@ -11,12 +11,13 @@ public interface TestMapper {
 
   TestMapper INSTANCE = Mappers.getMapper(TestMapper.class);
 
-  @Mapping(target = "input1", source = "abc")
+  @Mapping(target = "input1", constant = "abc")
+  @Mapping(target = "input2", source = "abc")
   @Mapping(target = "nestedThings", source = "abc")
   Output1 mapOutput1(String abc);
 
   @Mapping(target = "nested1", source = "abc")
-  @Mapping(target = "nested2", source = "abc")
+  @Mapping(target = "nested2", constant = "def")
   Output2 mapOutput2(String abc);
 
 }

@@ -24,6 +24,11 @@ public class ExternalMethodIteration implements Iteration {
   public void accept(MapStructMapperEntity entity) {
     for (var method : entity.getMappings()) {
       for (var mapping : method.getMappings()) {
+
+        if(mapping.getRefToOtherMapping() != null){
+          continue;
+        }
+
         var methodCallExpression = PsiTreeUtil.getChildOfType(mapping.getSource(), PsiMethodCallExpression.class);
         var polyadicExpression = PsiTreeUtil.getChildOfType(mapping.getSource(), PsiPolyadicExpression.class);
 

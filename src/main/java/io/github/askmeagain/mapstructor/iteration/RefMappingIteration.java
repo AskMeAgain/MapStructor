@@ -1,18 +1,17 @@
 package io.github.askmeagain.mapstructor.iteration;
 
-import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
 import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
+import io.github.askmeagain.mapstructor.services.MapstructorUtils;
 import lombok.RequiredArgsConstructor;
 
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class RefMappingIteration implements Iteration {
-
-  private final PsiFile psiFile;
 
   @Override
   public void accept(MapStructMapperEntity entity) {
@@ -43,8 +42,15 @@ public class RefMappingIteration implements Iteration {
     var ref = PsiTreeUtil.getChildOfType(element, PsiReferenceExpression.class);
 
     if (ref != null) {
-      return sourceContainer.withRefTargetType(ref.getType());
+      var type = MapstructorUtils.resolveBuilder(ref.getType(), ref.getProject());
+      return sourceContainer.withRefTargetType(type);
     }
+
+    var methodCallExpression = PsiTreeUtil.getChildOfType(element, PsiMethodCallExpression.class);
+    if (methodCallExpression != null) {
+      return sourceContainer.withRefTargetType(methodCallExpression.getType());
+    }
+
     return sourceContainer;
   }
 

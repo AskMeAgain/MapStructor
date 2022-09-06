@@ -23,7 +23,7 @@ public class MapstructorService {
     this.iterations = List.of(
         new CalcInputIteration(),
         new MapOutsideReferenceIteration(),
-        new RefMappingIteration(psiFile),
+        new RefMappingIteration(),
         new ExternalMethodIteration(psiFile)
     );
   }
