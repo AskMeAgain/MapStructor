@@ -23,12 +23,17 @@ public interface TestMapper {
   Output1 mapOutput1(String abc, String testVariable);
 
   @Mapping(target = "nested1", source = "abc")
-  @Mapping(target = "nested2", constant = "def")
+  @Mapping(target = "nested2", source = "abc", qualifiedByName = "mapNested2")
   @Mapping(target = "superNestedObject", expression = "java(mapOutput3(abc, testVariable))")
   Output2 mapOutput2(String abc, String testVariable);
 
   @Named("mapSuperNested1")
   default String mapSuperNested1(String abc) {
     return abc + abc + abc + abc;
+  }
+
+  @Named("mapNested2")
+  default String mapNested2(String abc) {
+    return "def" + abc + "__" + (2 * 10);
   }
 }

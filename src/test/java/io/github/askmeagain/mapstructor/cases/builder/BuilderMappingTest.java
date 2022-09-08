@@ -32,7 +32,7 @@ public class BuilderMappingTest extends AbstractTestBase {
         .input2(abc)
         .nestedThings(Output2.builder()
             .nested1(abc)
-            .nested2("def")
+            .nested2("def" + abc + "__" + (2 * 10))
             .superNestedObject(Output3.builder()
                 .superNested1(abc + abc + abc + abc)
                 .superNested2(testVariable)
