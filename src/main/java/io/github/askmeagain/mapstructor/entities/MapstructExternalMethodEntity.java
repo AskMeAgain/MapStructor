@@ -5,7 +5,7 @@ import com.intellij.psi.PsiType;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -13,6 +13,6 @@ public class MapstructExternalMethodEntity {
 
   PsiType outputType;
   String target;
-  List<VariableWithNameEntity> inputParams;
+  Set<VariableWithNameEntity> inputParams;
   PsiElement methodBody;
 }

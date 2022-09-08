@@ -10,7 +10,8 @@ import io.github.askmeagain.mapstructor.visitor.FindInputsVisitor;
 import io.github.askmeagain.mapstructor.visitor.FindMethodCallExpressionVisitor;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
+import java.util.Arrays;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static io.github.askmeagain.mapstructor.services.MapstructorUtils.getMethodName;
@@ -25,7 +26,7 @@ public class ExternalMethodIteration implements Iteration {
     for (var method : entity.getMappings()) {
       for (var mapping : method.getMappings()) {
 
-        if(mapping.getRefToOtherMapping() != null){
+        if (mapping.getRefToOtherMapping() != null) {
           continue;
         }
 
@@ -38,10 +39,21 @@ public class ExternalMethodIteration implements Iteration {
           extracted(entity, mapping, type);
         }
         if (polyadicExpression != null) {
-          var type = polyadicExpression.getType();
-          extracted(entity, mapping, type);
+          extractPolyadicExpression(entity, mapping, polyadicExpression);
         }
       }
+    }
+  }
+
+  private void extractPolyadicExpression(MapStructMapperEntity entity, MapstructMethodEntity.TargetSourceContainer mapping, PsiPolyadicExpression polyadicExpression) {
+    var type = polyadicExpression.getType();
+
+    var refChilds = PsiTreeUtil.getChildrenOfType(polyadicExpression, PsiReferenceExpression.class);
+
+    if (Arrays.stream(refChilds).allMatch(x -> x.getType().getCanonicalText().equals("String"))) {
+      extracted(entity, mapping, refChilds[0].getType());
+    } else {
+      extracted(entity, mapping, type);
     }
   }
 
@@ -66,14 +78,13 @@ public class ExternalMethodIteration implements Iteration {
     }
   }
 
-  private List<VariableWithNameEntity> findExternalMethodInputTypes(MapstructMethodEntity.TargetSourceContainer mapping) {
+  private Set<VariableWithNameEntity> findExternalMethodInputTypes(MapstructMethodEntity.TargetSourceContainer mapping) {
     return FindInputsVisitor.find(mapping.getSource())
         .stream()
         .map(x -> VariableWithNameEntity.builder()
             .type(x.getType())
             .name(x)
             .build())
-        .sorted()
-        .collect(Collectors.toList());
+        .collect(Collectors.toSet());
   }
 }
