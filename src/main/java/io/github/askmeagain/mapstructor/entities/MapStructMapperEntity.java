@@ -4,6 +4,7 @@ import com.intellij.psi.PsiType;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Singular;
+import lombok.With;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,11 @@ import java.util.List;
 public class MapStructMapperEntity {
 
   String packageName;
-  String mapperName;
+  @With
+  MapperConfig mapperConfig;
+
+  @Builder.Default
+  List<String> extendsList = new ArrayList<>();
 
   @Singular
   List<MapstructMethodEntity> mappings;

@@ -15,11 +15,9 @@ public class MapstructorService {
 
   private final PsiFile psiFile;
   private final List<Iteration> iterations;
-  private final String mapperName;
 
-  public MapstructorService(PsiFile psiFile, String mapperName) {
+  public MapstructorService(PsiFile psiFile) {
     this.psiFile = psiFile;
-    this.mapperName = mapperName;
     this.iterations = List.of(
         new CalcInputIteration(),
         new MapOutsideReferenceIteration(),
@@ -52,7 +50,6 @@ public class MapstructorService {
     var packageName = ((PsiClassOwner) psiFile).getPackageName();
 
     var mapstructEntity = MapStructMapperEntity.builder()
-        .mapperName(mapperName)
         .packageName(packageName)
         .mappings(result)
         .build();

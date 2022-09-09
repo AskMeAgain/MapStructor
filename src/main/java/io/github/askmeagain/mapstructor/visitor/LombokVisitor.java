@@ -24,13 +24,14 @@ public class LombokVisitor extends JavaRecursiveElementVisitor {
     super.visitMethodCallExpression(expression);
 
     if (expression.getText().endsWith(".builder()")) {
-      currentOutputType = MapstructorUtils.resolveBuilder(expression.getType(), expression.getProject());
+      var type = expression.getType();
+      currentOutputType = MapstructorUtils.resolveBuilder(type, expression.getProject());
     } else {
       try {
         var source = PsiTreeUtil.getChildOfType(expression, PsiExpressionList.class);
         var target = expression.getMethodExpression().getReferenceName();
 
-        if (source.getText().trim().endsWith(".build())")) {
+        if (expression.getText().trim().endsWith(".build())")) {
           var type = MapstructorUtils.resolveBuilder(
               PsiTreeUtil.getChildOfType(expression, PsiReferenceExpression.class).getType(),
               expression.getProject()

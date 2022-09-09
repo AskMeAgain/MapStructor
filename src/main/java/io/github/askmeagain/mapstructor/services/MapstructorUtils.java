@@ -1,11 +1,13 @@
 package io.github.askmeagain.mapstructor.services;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiCapturedWildcardType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.search.GlobalSearchScope;
+import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
 import io.github.askmeagain.mapstructor.entities.VariableWithNameEntity;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class MapstructorUtils {
@@ -19,32 +21,21 @@ public class MapstructorUtils {
   }
 
   public static PsiType resolveBuilder(PsiType temp, Project project) {
-    try {
-      if(!temp.getCanonicalText().endsWith("Builder")){
-        return temp;
-      }
-      var type = resolveCapture(temp);
-      var presentableText = type.getPresentableText();
-      var otherText = type.getCanonicalText();
 
-      if (presentableText.contains("<")) {
-        presentableText = presentableText.substring(0, presentableText.indexOf('<'));
-        otherText = otherText.substring(0, type.getCanonicalText().indexOf('<'));
-      }
+    var presentableText = temp.getPresentableText();
+    var otherText = temp.getCanonicalText();
 
-      var replacedName = otherText.replaceAll("." + presentableText + "$", "");
-      return PsiType.getTypeByName(replacedName, project, GlobalSearchScope.allScope(project));
-    } catch (Exception e) {
-      throw new RuntimeException(String.format("Cannot resolve builder because %s cannot be found", temp), e);
+    if (presentableText.contains("<")) {
+      presentableText = presentableText.substring(0, presentableText.indexOf('<'));
+      otherText = otherText.substring(0, temp.getCanonicalText().indexOf('<'));
     }
-  }
 
-  public static PsiType resolveCapture(PsiType psiType) {
-    if (psiType.getPresentableText().contains("capture of ?")) {
-      return ((PsiCapturedWildcardType) psiType).getUpperBound();
-    } else {
-      return psiType;
+    if (!presentableText.endsWith("Builder")) {
+      return temp;
     }
+
+    var replacedName = otherText.replaceAll("." + presentableText + "$", "");
+    return PsiType.getTypeByName(replacedName, project, GlobalSearchScope.allScope(project));
   }
 
   public static boolean matchesRegex(String regex, String text) {
@@ -77,5 +68,10 @@ public class MapstructorUtils {
     }
 
     return text;
+  }
+
+  @NotNull
+  public static List<MapStructMapperEntity> splitByConfig(MapStructMapperEntity entity) {
+    return List.of(entity);
   }
 }
