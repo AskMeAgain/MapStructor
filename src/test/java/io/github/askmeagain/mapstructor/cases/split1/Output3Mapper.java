@@ -1,4 +1,4 @@
-package io.github.askmeagain.mapstructor.cases.split;
+package io.github.askmeagain.mapstructor.cases.split1;
 
 import io.github.askmeagain.mapstructor.entities.Output3;
 import org.mapstruct.Mapper;

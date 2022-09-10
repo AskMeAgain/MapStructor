@@ -1,4 +1,4 @@
-package io.github.askmeagain.mapstructor.cases.split;
+package io.github.askmeagain.mapstructor.cases.split2;
 
 import io.github.askmeagain.mapstructor.common.AbstractTestBase;
 import io.github.askmeagain.mapstructor.entities.MapperConfig;
@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SplitTest extends AbstractTestBase {
+public class Split2Test extends AbstractTestBase {
 
   @ParameterizedTest
   @CsvSource({
@@ -25,7 +25,7 @@ public class SplitTest extends AbstractTestBase {
   @SneakyThrows
   void mappingTest(String input1, String input2) {
     var output = mappingResult(input1, input2);
-    var result = TestMapper.NOT_INSTANCE.mapOutput1(input2, input1);
+    var result = AnotherNameMapper.ANOTHER_INSTANCE_NAME.mapOutput1(input2, input1);
 
     assertThat(output)
         .usingRecursiveComparison()
@@ -35,9 +35,9 @@ public class SplitTest extends AbstractTestBase {
   @Override
   protected MapperConfig setMapperConfig() {
     return MapperConfig.builder()
-        .mapperName("TestMapper")
-        .instanceVariableName("NOT_INSTANCE")
-        .singleFile(new ArrayList<>(List.of("Output2", "Output3")))
+        .mapperName("AnotherNameMapper")
+        .instanceVariableName("ANOTHER_INSTANCE_NAME")
+        .singleFile(new ArrayList<>(List.of("Output2")))
         .build();
   }
 
@@ -48,11 +48,12 @@ public class SplitTest extends AbstractTestBase {
     var output2Nested = new Output2();
     var superNested = new Output3();
 
+    var externalMethod = a + b + "what ever";
+
     output2Nested.setNested1("1");
-    output2Nested.setNested2("1");
-    output2Nested.setOuterVariable(a);
+    output2Nested.setNested2(a);
     superNested.setSuperNested1("1");
-    superNested.setSuperNested2("1");
+    superNested.setSuperNested2(externalMethod);
     superNested.setSuperOuterVariable(b);
     output2Nested.setSuperNestedObject(superNested);
     output.setInput1("test");

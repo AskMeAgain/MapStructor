@@ -69,8 +69,8 @@ public abstract class AbstractTestBase extends LightJavaCodeInsightFixtureTestCa
 
     //both files have same path, but are not in the same project
     myFixture.checkResultByFile(
-        packageName + "/TestMapper.java",
-        packageName + "/TestMapper.java",
+        packageName + "/" + MapstructorAction.DEFAULT_TEST_CONFIG.getMapperName() + ".java",
+        packageName + "/" + MapstructorAction.DEFAULT_TEST_CONFIG.getMapperName() + ".java",
         false
     );
 
