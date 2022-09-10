@@ -10,8 +10,6 @@ import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
 import io.github.askmeagain.mapstructor.entities.VariableWithNameEntity;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -88,44 +86,32 @@ public class MapstructorUtils {
   @NotNull
   public static List<MapStructMapperEntity> splitByConfig(MapStructMapperEntity entity) {
 
-    var list = new ArrayList<MapStructMapperEntity>();
+    if (entity.getMapperConfig().getSingleFile()) {
+      return List.of(entity);
+    }
 
-    entity.getMapperConfig()
-        .getSingleFile()
-        .forEach(externalFileName -> list.add(MapStructMapperEntity.builder()
-            .mapperConfig(getMapperConfigPerFile(entity, externalFileName))
+    return entity.getMappings()
+        .stream()
+        .map(method -> MapStructMapperEntity.builder()
+            .mapperConfig(getMapperConfigPerFile(entity, method.getOutputType().getPresentableText()))
             .packageName(entity.getPackageName())
             .imports(entity.getImports())
+            .extendsList(method.getMappings().stream()
+                .map(MapstructMethodEntity.TargetSourceContainer::getRefToOtherMapping)
+                .filter(Objects::nonNull)
+                .map(MapstructMethodEntity::getOutputType)
+                .map(PsiType::getPresentableText)
+                .collect(Collectors.toList()))
             .staticImports(entity.getStaticImports())
             .mappings(entity.getMappings().stream()
-                .filter(x -> x.getOutputType().getPresentableText().equals(externalFileName))
+                .filter(x -> x.getOutputType().getPresentableText().equals(method.getOutputType().getPresentableText()))
                 .collect(Collectors.toList()))
             .externalMethodEntities(entity.getExternalMethodEntities())
-            .build()));
-
-    entity.getMappings().removeIf(x -> entity.getMapperConfig().getSingleFile().contains(x.getOutputType().getPresentableText()));
-
-    list.add(entity);
-
-    return list;
+            .build())
+        .collect(Collectors.toList());
   }
 
   private static MapperConfig getMapperConfigPerFile(MapStructMapperEntity entity, String externalFileName) {
-
-    var config = entity.getMapperConfig().withMapperName(externalFileName + "Mapper");
-
-    var refMappings = entity.getMappings()
-        .stream()
-        .filter(x -> x.getOutputType().getPresentableText().equals(externalFileName))
-        .map(MapstructMethodEntity::getMappings)
-        .flatMap(Collection::stream)
-        .map(MapstructMethodEntity.TargetSourceContainer::getRefToOtherMapping)
-        .filter(Objects::nonNull)
-        .map(x -> x.getOutputType().getPresentableText())
-        .collect(Collectors.toList());
-
-    config.setSingleFile(refMappings);
-
-    return config;
+    return entity.getMapperConfig().withMapperName(externalFileName + "Mapper");
   }
 }

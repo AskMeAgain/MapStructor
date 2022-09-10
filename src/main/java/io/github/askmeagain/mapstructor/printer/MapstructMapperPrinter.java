@@ -26,14 +26,14 @@ public class MapstructMapperPrinter {
   public static String print(MapStructMapperEntity result) {
 
     var mapperConfig = result.getMapperConfig();
-    var singleFileList = mapperConfig.getSingleFile();
 
-    var joinedExternal = " extends " + singleFileList.stream()
+    var joinedExternal = " extends " + result.getExtendsList()
+        .stream()
         .map(x -> x + "Mapper")
         .collect(Collectors.joining(", "));
 
     return MAPSTRUCT_TEMPLATE
-        .replace("$EXTENDS", singleFileList.isEmpty() ? "" : joinedExternal)
+        .replace("$EXTENDS", result.getExtendsList().isEmpty() ? "" : joinedExternal)
         .replace("$PACKAGE", result.getPackageName())
         .replace("$INSTANCE_METHOD", mapperConfig.getInstanceVariableName().isEmpty() ? "" : INSTANCE_TEMPLATE)
         .replace("$IMPORTS", MapstructImportPrinter.print(result))

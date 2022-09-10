@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class AbstractTestBase extends LightJavaCodeInsightFixtureTestCase {
@@ -35,9 +36,12 @@ public abstract class AbstractTestBase extends LightJavaCodeInsightFixtureTestCa
   protected MapperConfig setMapperConfig() {
     return MapperConfig.builder()
         .instanceVariableName("INSTANCE")
-        .singleFile(Collections.emptyList())
         .mapperName("TestMapper")
         .build();
+  }
+
+  protected List<String> setMapperNames(){
+    return Collections.emptyList();
   }
 
   @SneakyThrows
@@ -74,10 +78,10 @@ public abstract class AbstractTestBase extends LightJavaCodeInsightFixtureTestCa
         false
     );
 
-    for (var subMappers : MapstructorAction.DEFAULT_TEST_CONFIG.getSingleFile()) {
+    for (var subMappers : setMapperNames()) {
       myFixture.checkResultByFile(
-          packageName + "/" + subMappers + "Mapper.java",
-          packageName + "/" + subMappers + "Mapper.java",
+          packageName + "/" + subMappers + ".java",
+          packageName + "/" + subMappers + ".java",
           false
       );
     }

@@ -9,7 +9,6 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,7 +24,7 @@ public class SplitTest extends AbstractTestBase {
   @SneakyThrows
   void mappingTest(String input1, String input2) {
     var output = mappingResult(input1, input2);
-    var result = TestMapper.NOT_INSTANCE.mapOutput1(input2, input1);
+    var result = Output1Mapper.NOT_INSTANCE.mapOutput1(input2, input1);
 
     assertThat(output)
         .usingRecursiveComparison()
@@ -35,10 +34,15 @@ public class SplitTest extends AbstractTestBase {
   @Override
   protected MapperConfig setMapperConfig() {
     return MapperConfig.builder()
-        .mapperName("TestMapper")
+        .mapperName("Output1Mapper")
         .instanceVariableName("NOT_INSTANCE")
-        .singleFile(new ArrayList<>(List.of("Output2", "Output3")))
+        .singleFile(false)
         .build();
+  }
+
+  @Override
+  protected List<String> setMapperNames() {
+    return List.of("Output2Mapper", "Output3Mapper");
   }
 
   private static Output1 mappingResult(String a, String b) {
