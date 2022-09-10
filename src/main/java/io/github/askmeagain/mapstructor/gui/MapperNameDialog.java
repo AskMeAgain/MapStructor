@@ -9,23 +9,39 @@ import io.github.askmeagain.mapstructor.entities.MapperConfig;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.awt.event.ItemEvent;
 
 public class MapperNameDialog extends DialogWrapper {
   private final JTextField mapperNameField = new JTextField("DefaultMapper", 10);
   private final JCheckBox singleFileCheckbox = new JBCheckBox("Split into separate files");
+  private final JCheckBox abstractMapperCheckBox = new JBCheckBox("Abstract mapper");
   private final JTextField instanceVariableNameField = new JTextField("INSTANCE", 10);
+
+  private String previousMapperName = "-";
 
   public MapperConfig getConfig() {
     return MapperConfig.builder()
         .mapperName(mapperNameField.getText())
         .singleFile(!singleFileCheckbox.isSelected())
+        .abstractMapper(abstractMapperCheckBox.isSelected())
         .instanceVariableName(instanceVariableNameField.getText())
         .build();
-
   }
 
   public MapperNameDialog() {
     super(true);
+
+    singleFileCheckbox.addItemListener(e -> {
+      var selected = e.getStateChange() != ItemEvent.SELECTED;
+      mapperNameField.setEnabled(selected);
+      var temp = mapperNameField.getText();
+      if (selected) {
+        mapperNameField.setText(previousMapperName);
+      } else {
+        mapperNameField.setText(previousMapperName);
+      }
+      previousMapperName = temp;
+    });
 
     setTitle("Mapstructor");
     init();
@@ -46,6 +62,7 @@ public class MapperNameDialog extends DialogWrapper {
 
     var otherPanel = FormBuilder.createFormBuilder()
         .addLabeledComponent(new JBLabel("Instance Variable Name", JLabel.TRAILING), instanceVariableNameField, 1, false)
+        .addComponent(abstractMapperCheckBox)
         .addComponentFillVertically(new JPanel(), 0)
         .getPanel();
 

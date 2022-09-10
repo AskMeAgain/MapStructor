@@ -14,14 +14,15 @@ public class MapstructMapperPrinter {
           "$IMPORTS\n" +
           "\n" +
           "@Mapper\n" +
-          "public interface $MAPPER_NAME$EXTENDS {\n" +
+          "public $MAPPER_IMPLEMENTATION $MAPPER_NAME$EXTENDS {\n" +
           "\n" +
-          "  $INSTANCE_METHOD" +
+          "$INSTANCE_METHOD" +
           "$MAPPING_METHODS" +
           "$EXTERNAL_METHODS\n" +
           "}";
 
-  private static final String INSTANCE_TEMPLATE = "$MAPPER_NAME $INSTANCE = Mappers.getMapper($MAPPER_NAME.class);\n\n";
+  private static final String INSTANCE_TEMPLATE =
+      "  $STATIC_METHOD$MAPPER_NAME $INSTANCE = Mappers.getMapper($MAPPER_NAME.class);\n\n";
 
   public static String print(MapStructMapperEntity result) {
 
@@ -33,12 +34,14 @@ public class MapstructMapperPrinter {
         .collect(Collectors.joining(", "));
 
     return MAPSTRUCT_TEMPLATE
+        .replace("$MAPPER_IMPLEMENTATION", mapperConfig.isAbstractMapper() ? "abstract class" : "interface")
         .replace("$EXTENDS", result.getExtendsList().isEmpty() ? "" : joinedExternal)
         .replace("$PACKAGE", result.getPackageName())
         .replace("$INSTANCE_METHOD", mapperConfig.getInstanceVariableName().isEmpty() ? "" : INSTANCE_TEMPLATE)
         .replace("$IMPORTS", MapstructImportPrinter.print(result))
         .replace("$INSTANCE", mapperConfig.getInstanceVariableName())
         .replace("$MAPPER_NAME", mapperConfig.getMapperName())
+        .replace("$STATIC_METHOD", mapperConfig.isAbstractMapper() ? "public static final " : "")
         .replace("$MAPPING_METHODS", MapstructMethodPrinter.print(result))
         .replace("$EXTERNAL_METHODS", MapstructExternalMethodPrinter.print(result));
   }

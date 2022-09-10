@@ -37,6 +37,7 @@ public abstract class AbstractTestBase extends LightJavaCodeInsightFixtureTestCa
     return MapperConfig.builder()
         .instanceVariableName("INSTANCE")
         .mapperName("TestMapper")
+        .abstractMapper(false)
         .singleFile(true)
         .build();
   }

@@ -6,11 +6,12 @@ import lombok.With;
 
 @Data
 @Builder
+@With
 public class MapperConfig {
 
-  @With
   String mapperName;
   boolean singleFile;
+  boolean abstractMapper;
   String instanceVariableName;
 
 }
