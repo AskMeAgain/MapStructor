@@ -10,7 +10,7 @@ public class MapperConfig {
 
   @With
   String mapperName;
-  Boolean singleFile;
+  boolean singleFile;
   String instanceVariableName;
 
 }

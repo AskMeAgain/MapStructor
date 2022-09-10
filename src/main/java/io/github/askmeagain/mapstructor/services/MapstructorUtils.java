@@ -86,7 +86,7 @@ public class MapstructorUtils {
   @NotNull
   public static List<MapStructMapperEntity> splitByConfig(MapStructMapperEntity entity) {
 
-    if (entity.getMapperConfig().getSingleFile()) {
+    if (entity.getMapperConfig().isSingleFile()) {
       return List.of(entity);
     }
 

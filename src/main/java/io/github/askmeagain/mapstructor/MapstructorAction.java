@@ -23,7 +23,6 @@ public class MapstructorAction extends AnAction {
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
 
-
     var editor = e.getRequiredData(CommonDataKeys.EDITOR);
     var project = e.getRequiredData(CommonDataKeys.PROJECT);
     var data = e.getData(PlatformDataKeys.VIRTUAL_FILE);
