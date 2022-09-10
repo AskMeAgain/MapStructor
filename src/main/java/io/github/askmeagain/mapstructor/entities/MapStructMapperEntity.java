@@ -20,8 +20,8 @@ public class MapStructMapperEntity {
   @Builder.Default
   List<String> extendsList = new ArrayList<>();
 
-  @Singular
-  List<MapstructMethodEntity> mappings;
+  @Builder.Default
+  List<MapstructMethodEntity> mappings = new ArrayList<>();
 
   @Singular
   List<PsiType> imports;
@@ -31,4 +31,6 @@ public class MapStructMapperEntity {
 
   @Builder.Default
   List<MapstructExternalMethodEntity> externalMethodEntities = new ArrayList<>();
+
+
 }

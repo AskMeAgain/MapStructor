@@ -13,7 +13,6 @@ import io.github.askmeagain.mapstructor.services.MapstructorService;
 import io.github.askmeagain.mapstructor.services.MapstructorUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @Slf4j
@@ -52,7 +51,7 @@ public class MapstructorAction extends AnAction {
             data.getParent()
                 .createChildData(null, mappers.getMapperConfig().getMapperName() + ".java")
                 .setBinaryContent(printResult.getBytes(StandardCharsets.UTF_8));
-          } catch (IOException ex) {
+          } catch (Exception ex) {
             throw new RuntimeException("Cannot create mapper.", ex);
           }
         });

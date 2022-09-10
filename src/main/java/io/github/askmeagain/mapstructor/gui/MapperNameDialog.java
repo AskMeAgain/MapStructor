@@ -24,10 +24,10 @@ public class MapperNameDialog extends DialogWrapper {
   public MapperConfig getConfig() {
     return MapperConfig.builder()
         .mapperName(mapperNameField.getText())
-        .singleFile(singleFileCheckboxList.stream()
+        .singleFile(new ArrayList<>(singleFileCheckboxList.stream()
             .filter(AbstractButton::isSelected)
             .map(AbstractButton::getText)
-            .collect(Collectors.toList()))
+            .collect(Collectors.toList())))
         .instanceVariableName(instanceVariableNameField.getText())
         .build();
 

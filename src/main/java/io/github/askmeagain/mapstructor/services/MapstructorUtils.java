@@ -5,11 +5,14 @@ import com.intellij.psi.PsiCapturedWildcardType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.search.GlobalSearchScope;
 import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
+import io.github.askmeagain.mapstructor.entities.MapperConfig;
 import io.github.askmeagain.mapstructor.entities.VariableWithNameEntity;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class MapstructorUtils {
 
@@ -81,6 +84,38 @@ public class MapstructorUtils {
 
   @NotNull
   public static List<MapStructMapperEntity> splitByConfig(MapStructMapperEntity entity) {
-    return List.of(entity);
+
+    var list = new ArrayList<MapStructMapperEntity>();
+
+    entity.getMapperConfig()
+        .getSingleFile()
+        .forEach(externalFileName -> list.add(MapStructMapperEntity.builder()
+            .mapperConfig(getMapperConfig(entity, externalFileName))
+            .packageName(entity.getPackageName())
+            .imports(entity.getImports())
+            .staticImports(entity.getStaticImports())
+            .mappings(entity.getMappings().stream()
+                .filter(x -> x.getOutputType().getPresentableText().equals(externalFileName))
+                .collect(Collectors.toList()))
+            .externalMethodEntities(entity.getExternalMethodEntities())
+            .build()));
+
+    entity.getMappings().removeIf(x -> entity.getMapperConfig().getSingleFile().contains(x.getOutputType().getPresentableText()));
+
+    list.add(entity);
+
+    return list;
+  }
+
+  private static MapperConfig getMapperConfig(MapStructMapperEntity entity, String externalFileName) {
+    var config = entity.getMapperConfig().withMapperName(externalFileName + "Mapper");
+    var list = config.getSingleFile()
+        .stream()
+        .filter(x -> !x.equals(externalFileName))
+        .collect(Collectors.toList());
+
+    config.setSingleFile(list);
+
+    return config;
   }
 }

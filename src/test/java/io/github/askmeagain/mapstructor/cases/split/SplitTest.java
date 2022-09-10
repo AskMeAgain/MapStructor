@@ -9,6 +9,7 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,7 +37,7 @@ public class SplitTest extends AbstractTestBase {
     return MapperConfig.builder()
         .mapperName("TestMapper")
         .instanceVariableName("NOT_INSTANCE")
-        .singleFile(List.of("Output2", "Output3"))
+        .singleFile(new ArrayList<>(List.of("Output2", "Output3")))
         .build();
   }
 
