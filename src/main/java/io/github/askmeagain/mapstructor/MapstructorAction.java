@@ -32,11 +32,14 @@ public class MapstructorAction extends AnAction {
 
       var preConfigResult = new MapstructorService(psiFile).calculate(caret.getSelectionStart(), caret.getSelectionEnd());
 
-      var mapperNameDialog = new MapperNameDialog(e, preConfigResult);
+      var mapperNameDialog = new MapperNameDialog();
 
       var mapperConfig = DEFAULT_TEST_CONFIG;
       if (mapperNameDialog.getWindow() != null) {
         mapperNameDialog.show();
+        if (mapperNameDialog.getExitCode() != 0) {
+          return;
+        }
         mapperConfig = mapperNameDialog.getConfig();
       }
 

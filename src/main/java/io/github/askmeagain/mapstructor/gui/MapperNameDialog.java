@@ -1,36 +1,31 @@
 package io.github.askmeagain.mapstructor.gui;
 
-import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.ui.IdeBorderFactory;
+import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ui.FormBuilder;
-import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
 import io.github.askmeagain.mapstructor.entities.MapperConfig;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
 public class MapperNameDialog extends DialogWrapper {
-  private JTextField mapperNameField;
-  private JCheckBox singleFileCheckboxList;
-  private JTextField instanceVariableNameField;
-  private final AnActionEvent e;
-  private final MapStructMapperEntity mapStructMapperEntity;
+  private final JTextField mapperNameField = new JTextField("DefaultMapper", 10);
+  private final JCheckBox singleFileCheckbox = new JBCheckBox("Split into separate files");
+  private final JTextField instanceVariableNameField = new JTextField("INSTANCE", 10);
 
   public MapperConfig getConfig() {
     return MapperConfig.builder()
         .mapperName(mapperNameField.getText())
-        .singleFile(singleFileCheckboxList.isSelected())
+        .singleFile(!singleFileCheckbox.isSelected())
         .instanceVariableName(instanceVariableNameField.getText())
         .build();
 
   }
 
-  public MapperNameDialog(AnActionEvent e, MapStructMapperEntity result) {
+  public MapperNameDialog() {
     super(true);
-
-    this.e = e;
-    this.mapStructMapperEntity = result;
 
     setTitle("Mapstructor");
     init();
@@ -49,13 +44,25 @@ public class MapperNameDialog extends DialogWrapper {
   @Override
   protected @Nullable JComponent createCenterPanel() {
 
-    mapperNameField = new JTextField("DefaultMapper", 10);
-    instanceVariableNameField = new JTextField("INSTANCE", 10);
-
-    return FormBuilder.createFormBuilder()
-        .addLabeledComponent(new JBLabel("MapperName", JLabel.TRAILING), mapperNameField, 1, false)
+    var otherPanel = FormBuilder.createFormBuilder()
         .addLabeledComponent(new JBLabel("Instance Variable Name", JLabel.TRAILING), instanceVariableNameField, 1, false)
         .addComponentFillVertically(new JPanel(), 0)
+        .getPanel();
+
+    var titledBorder = IdeBorderFactory.createTitledBorder("Other", false);
+    otherPanel.setBorder(titledBorder);
+
+    var inputPanel = FormBuilder.createFormBuilder()
+        .addLabeledComponent(new JBLabel("MapperName", JLabel.TRAILING), mapperNameField, 1, false)
+        .addComponent(singleFileCheckbox)
+        .addComponentFillVertically(new JPanel(), 0)
+        .getPanel();
+    var inputPanelTitle = IdeBorderFactory.createTitledBorder("Input", false);
+    inputPanel.setBorder(inputPanelTitle);
+
+    return FormBuilder.createFormBuilder()
+        .addComponent(inputPanel)
+        .addComponent(otherPanel)
         .getPanel();
   }
 }
