@@ -54,6 +54,9 @@ public abstract class AbstractTestBase extends LightJavaCodeInsightFixtureTestCa
         .collect(Collectors.joining("\n"));
 
     myFixture.addFileToProject(packageName + "/input.java", replacedMapperFile);
+    for (var subMappers : MapstructorAction.DEFAULT_TEST_CONFIG.getSingleFile()) {
+      myFixture.configureByFiles(packageName + "/" + subMappers + "Mapper.java");
+    }
     myFixture.configureByFiles(
         packageName + "/input.java",
         packageName + entitiesDir + "BaseEntity.java",
@@ -63,10 +66,6 @@ public abstract class AbstractTestBase extends LightJavaCodeInsightFixtureTestCa
         packageName + entitiesDir + "Output2.java",
         packageName + entitiesDir + "Output3.java"
     );
-
-    for (var subMappers : MapstructorAction.DEFAULT_TEST_CONFIG.getSingleFile()) {
-      myFixture.configureByFiles(packageName + "/" + subMappers + "Mapper.java");
-    }
 
     myFixture.performEditorAction(mapstructorAction);
 

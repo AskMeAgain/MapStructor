@@ -5,7 +5,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper
-public interface Output2Mapper extends Output3Mapper{
+public interface Output2Mapper extends Output3Mapper {
 
   @Mapping(target = "nested1", constant = "1")
   @Mapping(target = "nested2", constant = "1")
