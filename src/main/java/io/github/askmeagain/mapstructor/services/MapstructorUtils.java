@@ -1,6 +1,7 @@
 package io.github.askmeagain.mapstructor.services;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiCapturedWildcardType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.search.GlobalSearchScope;
 import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
@@ -68,6 +69,14 @@ public class MapstructorUtils {
     }
 
     return text;
+  }
+
+  public static PsiType resolveCapture(PsiType psiType) {
+    if (psiType.getPresentableText().contains("capture of ?")) {
+      return ((PsiCapturedWildcardType) psiType).getUpperBound();
+    } else {
+      return psiType;
+    }
   }
 
   @NotNull

@@ -6,7 +6,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface TestMapper extends Output2Mapper {
+public interface TestMapper extends Output2Mapper, Output3Mapper {
 
   TestMapper NOT_INSTANCE = Mappers.getMapper(TestMapper.class);
 

@@ -23,7 +23,7 @@ public abstract class AbstractTestBase extends LightJavaCodeInsightFixtureTestCa
   @Test
   public void calculateMapper() throws Exception {
     try {
-      setUp();
+      super.setUp();
       executeTest();
     } catch (Exception e) {
       addSuppressedException(e);
@@ -56,6 +56,7 @@ public abstract class AbstractTestBase extends LightJavaCodeInsightFixtureTestCa
     myFixture.addFileToProject(packageName + "/input.java", replacedMapperFile);
     myFixture.configureByFiles(
         packageName + "/input.java",
+        packageName + entitiesDir + "BaseEntity.java",
         packageName + entitiesDir + "Input1.java",
         packageName + entitiesDir + "Input2.java",
         packageName + entitiesDir + "Output1.java",

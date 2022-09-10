@@ -43,12 +43,15 @@ public class RefMappingIteration implements Iteration {
 
     if (ref != null) {
       var type = MapstructorUtils.resolveBuilder(ref.getType(), ref.getProject());
-      return sourceContainer.withRefTargetType(type);
+      var resolvedType = MapstructorUtils.resolveCapture(type);
+      return sourceContainer.withRefTargetType(resolvedType);
     }
 
     var methodCallExpression = PsiTreeUtil.getChildOfType(element, PsiMethodCallExpression.class);
     if (methodCallExpression != null) {
-      return sourceContainer.withRefTargetType(methodCallExpression.getType());
+      var type = methodCallExpression.getType();
+      var resolvedType = MapstructorUtils.resolveCapture(type);
+      return sourceContainer.withRefTargetType(resolvedType);
     }
 
     return sourceContainer;
