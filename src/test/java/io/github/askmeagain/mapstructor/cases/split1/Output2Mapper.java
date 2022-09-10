@@ -13,7 +13,7 @@ public interface Output2Mapper extends Output3Mapper {
   @Mapping(target = "nested1", constant = "1")
   @Mapping(target = "nested2", constant = "1")
   @Mapping(target = "outerVariable", source = "a")
-  @Mapping(target = "superNestedObject", source = "b")
+  @Mapping(target = "superNestedObject", expression = "java(mapOutput3(b, a))")
   Output2 mapOutput2(String b, String a);
 
 }

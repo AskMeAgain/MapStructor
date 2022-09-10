@@ -54,11 +54,17 @@ public class MapstructMappingPrinter {
         isExternalMethod = false;
         hasExpression = true;
         expressionText = MapstructorUtils.removeBrackets(mapping.getSource().getText());
-      } else {
+      } else if (inputParams.size() == 1) {
         qualifiedText = ", qualifiedByName = \"" + methodName + "\"";
         sourceText = inputParams.stream()
             .map(x -> x.getName().getText())
             .collect(Collectors.joining(", "));
+      } else {
+        hasSource = false;
+        hasExpression = true;
+        expressionText = methodName + "(" + inputParams.stream()
+            .map(x -> x.getName().getText())
+            .collect(Collectors.joining(", ")) + ")";
       }
     }
 

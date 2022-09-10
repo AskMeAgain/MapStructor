@@ -106,7 +106,9 @@ public class MapstructorUtils {
             .mappings(entity.getMappings().stream()
                 .filter(x -> x.getOutputType().getPresentableText().equals(method.getOutputType().getPresentableText()))
                 .collect(Collectors.toList()))
-            .externalMethodEntities(entity.getExternalMethodEntities())
+            .externalMethodEntities(entity.getExternalMethodEntities().stream()
+                .filter(x -> x.getAttachedMethod().equals(method))
+                .collect(Collectors.toList()))
             .build())
         .collect(Collectors.toList());
   }

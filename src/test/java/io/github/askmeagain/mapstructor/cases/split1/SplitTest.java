@@ -42,7 +42,7 @@ public class SplitTest extends AbstractTestBase {
 
   @Override
   protected List<String> setMapperNames() {
-    return List.of("Output2Mapper", "Output3Mapper");
+    return List.of("Output3Mapper", "Output2Mapper");
   }
 
   private static Output1 mappingResult(String a, String b) {
@@ -56,7 +56,7 @@ public class SplitTest extends AbstractTestBase {
     output2Nested.setNested2("1");
     output2Nested.setOuterVariable(a);
     superNested.setSuperNested1("1");
-    superNested.setSuperNested2("1");
+    superNested.setSuperNested2("1" + a + b);
     superNested.setSuperOuterVariable(b);
     output2Nested.setSuperNestedObject(superNested);
     output.setInput1("test");

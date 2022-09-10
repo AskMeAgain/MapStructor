@@ -32,7 +32,6 @@ public class VariableWithNameEntity implements Comparable<VariableWithNameEntity
     return this.getName().getQualifiedName().equals(p.getName().getQualifiedName())
         && this.getType().getCanonicalText().equals(p.getType().getCanonicalText());
   }
-
   @Override
   public int compareTo(@NotNull VariableWithNameEntity o) {
     return this.getName().getReferenceName().compareTo(o.getName().getReferenceName());

@@ -36,32 +36,43 @@ public class ExternalMethodIteration implements Iteration {
         if (methodCallExpression != null) {
           var realInstance = FindMethodCallExpressionVisitor.find(methodCallExpression, psiFile);
           var type = realInstance.getMethodExpression().getType();
-          extracted(entity, mapping, type);
+          extracted(entity, mapping, type, method);
         }
         if (polyadicExpression != null) {
-          extractPolyadicExpression(entity, mapping, polyadicExpression);
+          extractPolyadicExpression(entity, mapping, polyadicExpression, method);
         }
       }
     }
   }
 
-  private void extractPolyadicExpression(MapStructMapperEntity entity, MapstructMethodEntity.TargetSourceContainer mapping, PsiPolyadicExpression polyadicExpression) {
+  private void extractPolyadicExpression(
+      MapStructMapperEntity entity,
+      MapstructMethodEntity.TargetSourceContainer mapping,
+      PsiPolyadicExpression polyadicExpression,
+      MapstructMethodEntity method
+  ) {
     var type = polyadicExpression.getType();
 
     var refChilds = PsiTreeUtil.getChildrenOfType(polyadicExpression, PsiReferenceExpression.class);
 
     if (Arrays.stream(refChilds).allMatch(x -> x.getType().getCanonicalText().equals("String"))) {
-      extracted(entity, mapping, refChilds[0].getType());
+      extracted(entity, mapping, refChilds[0].getType(), method);
     } else {
-      extracted(entity, mapping, type);
+      extracted(entity, mapping, type, method);
     }
   }
 
-  private void extracted(MapStructMapperEntity entity, MapstructMethodEntity.TargetSourceContainer mapping, PsiType type) {
+  private void extracted(
+      MapStructMapperEntity entity,
+      MapstructMethodEntity.TargetSourceContainer mapping,
+      PsiType type,
+      MapstructMethodEntity method
+  ) {
     var externalMethod = MapstructExternalMethodEntity.builder()
         .methodBody(mapping.getSource())
         .target(mapping.getTarget())
         .outputType(type)
+        .attachedMethod(method)
         .inputParams(findExternalMethodInputTypes(mapping))
         .build();
     entity.getExternalMethodEntities().add(externalMethod);
@@ -72,8 +83,8 @@ public class ExternalMethodIteration implements Iteration {
 
     //needs to be static import
     if (methodRef != null && !methodRef.getText().contains(".")) {
-      var method = FindMethodCallExpressionVisitor.find(methodRef, psiFile);
-      var parent = PsiTreeUtil.getParentOfType(method, PsiClass.class);
+      var m1 = FindMethodCallExpressionVisitor.find(methodRef, psiFile);
+      var parent = PsiTreeUtil.getParentOfType(m1, PsiClass.class);
       entity.getStaticImports().add(parent.getQualifiedName() + "." + getMethodName(methodRef.getText()));
     }
   }

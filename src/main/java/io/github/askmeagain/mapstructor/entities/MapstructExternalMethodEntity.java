@@ -12,7 +12,15 @@ import java.util.Set;
 public class MapstructExternalMethodEntity {
 
   PsiType outputType;
+
+  MapstructMethodEntity attachedMethod;
   String target;
   Set<VariableWithNameEntity> inputParams;
   PsiElement methodBody;
+
+  @Override
+  public String toString(){
+    return "Method: " + outputType.getPresentableText();
+  }
 }
+
