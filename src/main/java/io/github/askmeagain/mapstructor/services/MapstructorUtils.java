@@ -6,11 +6,14 @@ import com.intellij.psi.PsiType;
 import com.intellij.psi.search.GlobalSearchScope;
 import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
 import io.github.askmeagain.mapstructor.entities.MapperConfig;
+import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
 import io.github.askmeagain.mapstructor.entities.VariableWithNameEntity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -90,7 +93,7 @@ public class MapstructorUtils {
     entity.getMapperConfig()
         .getSingleFile()
         .forEach(externalFileName -> list.add(MapStructMapperEntity.builder()
-            .mapperConfig(getMapperConfig(entity, externalFileName))
+            .mapperConfig(getMapperConfigPerFile(entity, externalFileName))
             .packageName(entity.getPackageName())
             .imports(entity.getImports())
             .staticImports(entity.getStaticImports())
@@ -107,14 +110,21 @@ public class MapstructorUtils {
     return list;
   }
 
-  private static MapperConfig getMapperConfig(MapStructMapperEntity entity, String externalFileName) {
+  private static MapperConfig getMapperConfigPerFile(MapStructMapperEntity entity, String externalFileName) {
+
     var config = entity.getMapperConfig().withMapperName(externalFileName + "Mapper");
-    var list = config.getSingleFile()
+
+    var refMappings = entity.getMappings()
         .stream()
-        .filter(x -> !x.equals(externalFileName))
+        .filter(x -> x.getOutputType().getPresentableText().equals(externalFileName))
+        .map(MapstructMethodEntity::getMappings)
+        .flatMap(Collection::stream)
+        .map(MapstructMethodEntity.TargetSourceContainer::getRefToOtherMapping)
+        .filter(Objects::nonNull)
+        .map(x -> x.getOutputType().getPresentableText())
         .collect(Collectors.toList());
 
-    config.setSingleFile(list);
+    config.setSingleFile(refMappings);
 
     return config;
   }
