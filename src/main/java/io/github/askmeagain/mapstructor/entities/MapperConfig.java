@@ -11,6 +11,7 @@ public class MapperConfig {
 
   String mapperName;
   boolean singleFile;
+  boolean replaceWithInit;
   boolean abstractMapper;
   String instanceVariableName;
 

@@ -15,6 +15,7 @@ public class MapperNameDialog extends DialogWrapper {
   private final JTextField mapperNameField = new JTextField("DefaultMapper", 10);
   private final JCheckBox singleFileCheckbox = new JBCheckBox("Split into separate files");
   private final JCheckBox abstractMapperCheckBox = new JBCheckBox("Abstract mapper");
+  private final JCheckBox replaceWithInitializeCheckbox = new JBCheckBox("Replace with mapper call");
   private final JTextField instanceVariableNameField = new JTextField("INSTANCE", 10);
 
   private String previousMapperName = "-";
@@ -23,6 +24,7 @@ public class MapperNameDialog extends DialogWrapper {
     return MapperConfig.builder()
         .mapperName(mapperNameField.getText())
         .singleFile(!singleFileCheckbox.isSelected())
+        .replaceWithInit(replaceWithInitializeCheckbox.isSelected())
         .abstractMapper(abstractMapperCheckBox.isSelected())
         .instanceVariableName(instanceVariableNameField.getText())
         .build();
@@ -63,6 +65,7 @@ public class MapperNameDialog extends DialogWrapper {
     var otherPanel = FormBuilder.createFormBuilder()
         .addLabeledComponent(new JBLabel("Instance Variable Name", JLabel.TRAILING), instanceVariableNameField, 1, false)
         .addComponent(abstractMapperCheckBox)
+        .addComponent(replaceWithInitializeCheckbox)
         .addComponentFillVertically(new JPanel(), 0)
         .getPanel();
 

@@ -27,6 +27,7 @@ public class MapstructorAction extends AnAction {
     var project = e.getRequiredData(CommonDataKeys.PROJECT);
     var data = e.getData(PlatformDataKeys.VIRTUAL_FILE);
     var psiFile = e.getData(PlatformDataKeys.PSI_FILE);
+    var document = editor.getDocument();
 
     editor.getCaretModel().runForEachCaret(caret -> {
 
@@ -56,6 +57,14 @@ public class MapstructorAction extends AnAction {
           } catch (Exception ex) {
             throw new RuntimeException("Cannot create mapper.", ex);
           }
+        });
+      }
+
+      if (afterConfigResult.getMapperConfig().isReplaceWithInit()) {
+        WriteCommandAction.runWriteCommandAction(project, () -> {
+          document.deleteString(caret.getSelectionStart(), caret.getSelectionEnd());
+          var mapCall = afterConfigResult.getMapperConfig().getMapperName() + ".map(param1, param2)";
+          document.insertString(caret.getSelectionStart(), mapCall);
         });
       }
     });
