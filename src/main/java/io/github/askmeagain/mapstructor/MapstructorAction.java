@@ -5,8 +5,11 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.psi.PsiElement;
 import groovy.util.logging.Slf4j;
 import io.github.askmeagain.mapstructor.entities.MapperConfig;
+import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
+import io.github.askmeagain.mapstructor.entities.VariableWithNameEntity;
 import io.github.askmeagain.mapstructor.gui.MapperNameDialog;
 import io.github.askmeagain.mapstructor.printer.MapstructMapperPrinter;
 import io.github.askmeagain.mapstructor.services.MapstructorService;
@@ -14,6 +17,7 @@ import io.github.askmeagain.mapstructor.services.MapstructorUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class MapstructorAction extends AnAction {
@@ -31,7 +35,10 @@ public class MapstructorAction extends AnAction {
 
     editor.getCaretModel().runForEachCaret(caret -> {
 
-      var preConfigResult = new MapstructorService(psiFile).calculate(caret.getSelectionStart(), caret.getSelectionEnd());
+      var selectionStart = caret.getSelectionStart();
+      var selectionEnd = caret.getSelectionEnd();
+
+      var preConfigResult = new MapstructorService(psiFile).calculate(selectionStart, selectionEnd);
 
       var mapperNameDialog = new MapperNameDialog();
 
@@ -62,11 +69,29 @@ public class MapstructorAction extends AnAction {
 
       if (afterConfigResult.getMapperConfig().isReplaceWithInit()) {
         WriteCommandAction.runWriteCommandAction(project, () -> {
-          document.deleteString(caret.getSelectionStart(), caret.getSelectionEnd());
-          var mapCall = afterConfigResult.getMapperConfig().getMapperName() + ".map(param1, param2)";
-          document.insertString(caret.getSelectionStart(), mapCall);
+          document.deleteString(selectionStart, selectionEnd);
+
+          var mainMethod = afterConfigResult.getMappings()
+              .stream()
+              .filter(MapstructMethodEntity::isMainMappingMethod)
+              .findFirst()
+              .orElseThrow();
+
+          var mapCall = INIT_TEMPLATE.replace("$RETURN", afterConfigResult.getIncludedReturn() ? "return " : "")
+              .replace("$MAPPER_NAME", afterConfigResult.getMapperConfig().getMapperName())
+              .replace("$INSTANCE_NAME", afterConfigResult.getMapperConfig().getInstanceVariableName())
+              .replace("$MAIN_METHOD", "map" + mainMethod.getOutputType().getPresentableText())
+              .replace("$PARAMS", mainMethod.calculateDeepInputs()
+                  .stream()
+                  .map(VariableWithNameEntity::getName)
+                  .map(PsiElement::getText)
+                  .collect(Collectors.joining(", ")));
+
+          document.insertString(selectionStart, mapCall);
         });
       }
     });
   }
+
+  private static final String INIT_TEMPLATE = "$RETURN$MAPPER_NAME.$INSTANCE_NAME.$MAIN_METHOD($PARAMS);";
 }

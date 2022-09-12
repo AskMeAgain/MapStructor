@@ -17,6 +17,8 @@ public class MapStructMapperEntity {
   @With
   MapperConfig mapperConfig;
 
+  Boolean includedReturn;
+
   @Builder.Default
   List<String> extendsList = new ArrayList<>();
 

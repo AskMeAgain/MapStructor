@@ -33,6 +33,10 @@ public abstract class AbstractTestBase extends LightJavaCodeInsightFixtureTestCa
     }
   }
 
+  protected String setMappingReplacement() {
+    return "";
+  }
+
   protected MapperConfig setMapperConfig() {
     return MapperConfig.builder()
         .instanceVariableName("INSTANCE")
@@ -42,7 +46,7 @@ public abstract class AbstractTestBase extends LightJavaCodeInsightFixtureTestCa
         .build();
   }
 
-  protected List<String> setMapperNames(){
+  protected List<String> setMapperNames() {
     return Collections.emptyList();
   }
 
@@ -84,6 +88,26 @@ public abstract class AbstractTestBase extends LightJavaCodeInsightFixtureTestCa
       myFixture.checkResultByFile(
           packageName + "/" + subMappers + ".java",
           packageName + "/" + subMappers + ".java",
+          false
+      );
+    }
+
+    if (setMapperConfig().isReplaceWithInit()) {
+
+      var inputFile = Files.readAllLines(Path.of(testFileName))
+          .stream().collect(Collectors.joining("\n"));
+
+      var begin = inputFile.indexOf("//<selection") - 2;
+      var end = inputFile.indexOf("//</selection") + "//</selection>".length();
+
+      var firstHalf = inputFile.substring(0, begin);
+      var secondHalf = inputFile.substring(end);
+
+      var result = firstHalf + setMappingReplacement() + secondHalf;
+
+      myFixture.checkResult(
+          packageName + "/input.java",
+          result,
           false
       );
     }

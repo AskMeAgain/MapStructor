@@ -6,6 +6,7 @@ import io.github.askmeagain.mapstructor.entities.BasicMapping;
 import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
 import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
 import io.github.askmeagain.mapstructor.iteration.*;
+import io.github.askmeagain.mapstructor.visitor.FindMainMethodVisitor;
 import io.github.askmeagain.mapstructor.visitor.MappingVisitor;
 
 import java.util.List;
@@ -20,9 +21,9 @@ public class MapstructorService {
     this.psiFile = psiFile;
     this.iterations = List.of(
         new CalcInputIteration(),
-        new MapOutsideReferenceIteration(),
         new RefMappingIteration(),
-        new ExternalMethodIteration(psiFile)
+        new ExternalMethodIteration(psiFile),
+        new MainMethodIteration()
     );
   }
 
@@ -49,8 +50,11 @@ public class MapstructorService {
 
     var packageName = ((PsiClassOwner) psiFile).getPackageName();
 
+    var isReturn = FindMainMethodVisitor.find(psiFile, start, end);
+
     var mapstructEntity = MapStructMapperEntity.builder()
         .packageName(packageName)
+        .includedReturn(isReturn)
         .mappings(result)
         .build();
 

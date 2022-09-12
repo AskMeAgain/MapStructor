@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class MapstructMethodEntity {
 
+  boolean mainMappingMethod;
   private List<TargetSourceContainer> mappings;
 
   @EqualsAndHashCode.Include

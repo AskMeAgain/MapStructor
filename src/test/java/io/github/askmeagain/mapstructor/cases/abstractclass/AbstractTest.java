@@ -32,11 +32,18 @@ public class AbstractTest extends AbstractTestBase {
   @Override
   protected MapperConfig setMapperConfig() {
     return super.setMapperConfig()
+        .withReplaceWithInit(true)
         .withAbstractMapper(true);
+  }
+
+  @Override
+  protected String setMappingReplacement() {
+    return "  return TestMapper.INSTANCE.mapOutput1(b, a);";
   }
 
   private static Output1 mappingResult(String a, String b) {
 
+    //<caret>
     //<selection>
     var output = new Output1();
     var output2Nested = new Output2();
