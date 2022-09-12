@@ -6,5 +6,5 @@
 
 ## Configs
 
-* Nested Mappers are split
-* Set default mapping
+* Nested Mappers are split into separate files
+* Replace selected code with mapper initialization
