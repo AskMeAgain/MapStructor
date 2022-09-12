@@ -7,7 +7,7 @@ of code and executing an action.
 
 ## Getting started
 
-1. Get the plugin from the intellij store.
+1. Get the plugin from the [intellij plugin store](https://plugins.jetbrains.com/plugin/19926-mapstructor).
 2. Select any text
 3. Executor the "MapStructor" Action
 4. Select configs

@@ -3,7 +3,7 @@ plugins {
     id 'java'
 }
 
-group 'io.github.askmeagain'
+group 'io.github.askmeagain.mapstructor'
 version System.getenv("RELEASE_VERSION")
 
 repositories {
