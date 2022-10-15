@@ -18,8 +18,12 @@ public class MapstructExternalMethodEntity {
   Set<VariableWithNameEntity> inputParams;
   PsiElement methodBody;
 
+  public boolean isNamedMethod() {
+    return inputParams.size() == 1;
+  }
+
   @Override
-  public String toString(){
+  public String toString() {
     return "Method: " + outputType.getPresentableText();
   }
 }

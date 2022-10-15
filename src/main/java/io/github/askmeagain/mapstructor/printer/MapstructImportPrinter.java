@@ -2,6 +2,7 @@ package io.github.askmeagain.mapstructor.printer;
 
 import com.intellij.psi.PsiType;
 import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
+import io.github.askmeagain.mapstructor.entities.MapstructExternalMethodEntity;
 import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
 import io.github.askmeagain.mapstructor.entities.VariableWithNameEntity;
 
@@ -23,7 +24,8 @@ public class MapstructImportPrinter {
     );
 
     var stringStream = Stream.of("org.mapstruct.Named")
-        .filter(x -> !entity.getExternalMethodEntities().isEmpty());
+        .filter(x -> !entity.getExternalMethodEntities().isEmpty())
+        .filter(x -> entity.getExternalMethodEntities().stream().anyMatch(MapstructExternalMethodEntity::isNamedMethod));
 
     var another = entity.getMappings().stream()
         .map(MapstructMethodEntity::getOutputType)

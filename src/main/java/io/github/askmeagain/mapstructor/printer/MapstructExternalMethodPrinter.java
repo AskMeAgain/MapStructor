@@ -11,7 +11,8 @@ import static io.github.askmeagain.mapstructor.services.MapstructorUtils.toPasca
 
 public class MapstructExternalMethodPrinter {
 
-  private static final String MAPSTRUCT_METHOD = "\n  @Named(\"$METHOD_NAME\")\n" +
+  private static final String MAPSTRUCT_NAMED = "\n  @Named(\"$METHOD_NAME\")";
+  private static final String MAPSTRUCT_METHOD = "$NAMED\n" +
       "  default $OUTPUT_TYPE $METHOD_NAME($PARAMS) {\n" +
       "    return $METHOD_BODY;\n" +
       "  }";
@@ -30,6 +31,7 @@ public class MapstructExternalMethodPrinter {
     var methodName = "map" + toPascalCase(container.getTarget());
 
     return MAPSTRUCT_METHOD
+        .replace("$NAMED", container.isNamedMethod() ? MAPSTRUCT_NAMED : "")
         .replace("$OUTPUT_TYPE", outputType.getPresentableText())
         .replace("$METHOD_NAME", methodName)
         .replace("$PARAMS", container.getInputParams().stream()

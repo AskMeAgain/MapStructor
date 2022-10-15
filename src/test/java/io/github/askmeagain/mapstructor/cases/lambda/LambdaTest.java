@@ -15,7 +15,7 @@ public class LambdaTest extends AbstractTestBase {
   @Test
   void mappingTest() {
     var output = mappingResult(Optional.of(new Output3()), "whatever");
-    var result = TestMapper.INSTANCE.mapOutput1(Optional.of(new Output3()));
+    var result = TestMapper.INSTANCE.mapOutput1(Optional.of(new Output3()), "whatever");
 
     assertThat(output)
         .usingRecursiveComparison()
@@ -29,11 +29,10 @@ public class LambdaTest extends AbstractTestBase {
     var output2Nested = new Output2();
     var output3 = new Output3();
 
-    output3.setAnotherObject(optObj.map(x -> new AnotherObject(anotherInput)).orElse(new AnotherObject()));
-    output2Nested.setSuperNestedObject(optObj.map(x -> x).orElse(output3));
-    output2Nested.setNested2("1");
     output.setNestedThings(output2Nested);
+    output2Nested.setNested2("1");
     output2Nested.setSuperNestedObject(output3);
+    output3.setAnotherObject(optObj.map(x -> new AnotherObject(anotherInput)).orElse(new AnotherObject()));
 
     return output;
     //</selection>
