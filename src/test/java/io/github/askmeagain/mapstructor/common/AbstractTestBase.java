@@ -68,6 +68,8 @@ public abstract class AbstractTestBase extends LightJavaCodeInsightFixtureTestCa
     myFixture.configureByFiles(
         packageName + "/input.java",
         packageName + entitiesDir + "BaseEntity.java",
+        packageName + entitiesDir + "Optional.java",
+        packageName + entitiesDir + "AnotherObject.java",
         packageName + entitiesDir + "Input1.java",
         packageName + entitiesDir + "Input2.java",
         packageName + entitiesDir + "Output1.java",

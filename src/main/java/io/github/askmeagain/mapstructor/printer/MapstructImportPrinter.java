@@ -6,6 +6,7 @@ import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
 import io.github.askmeagain.mapstructor.entities.VariableWithNameEntity;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,7 +33,9 @@ public class MapstructImportPrinter {
         .map(MapstructMethodEntity::calculateDeepInputs)
         .flatMap(Collection::stream)
         .map(VariableWithNameEntity::getType)
-        .map(PsiType::getCanonicalText);
+        .map(PsiType::getCanonicalText)
+        .map(MapstructImportPrinter::splitGeneric)
+        .flatMap(Collection::stream);
 
     var normalImports = Stream.of(stream, collectedImportStream, another, stringStream)
         .flatMap(Function.identity())
@@ -50,5 +53,13 @@ public class MapstructImportPrinter {
 
     return TEMPLATE.replace("$NORMAL_IMPORTS", normalImports)
         .replace("$STATIC_IMPORTS", entity.getStaticImports().isEmpty() ? "" : staticImports);
+  }
+
+  private static List<String> splitGeneric(String imports) {
+    if (imports.contains("<")) {
+      return List.of(imports.substring(0, imports.indexOf("<")), imports.substring(imports.indexOf("<") + 1, imports.length() - 1));
+    }
+
+    return List.of(imports);
   }
 }

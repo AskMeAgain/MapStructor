@@ -7,6 +7,8 @@ public class Output3 extends BaseEntity{
   String superNested2;
   String superOuterVariable;
 
+  AnotherObject anotherObject;
+
   public Output3() {
   }
 
@@ -15,6 +17,7 @@ public class Output3 extends BaseEntity{
     this.superNested1 = b.superNested1;
     this.superNested2 = b.superNested2;
     this.superOuterVariable = b.superOuterVariable;
+    this.anotherObject = b.anotherObject;
   }
 
   public static Output3Builder<?, ?> builder() {
@@ -32,9 +35,15 @@ public class Output3 extends BaseEntity{
   public String getSuperOuterVariable() {
     return this.superOuterVariable;
   }
+  public AnotherObject getAnotherObject() {
+    return this.anotherObject;
+  }
 
   public void setSuperNested1(String superNested1) {
     this.superNested1 = superNested1;
+  }
+  public void setAnotherObject(AnotherObject anotherObject) {
+    this.anotherObject = anotherObject;
   }
 
   public void setSuperNested2(String superNested2) {
@@ -81,14 +90,11 @@ public class Output3 extends BaseEntity{
     return result;
   }
 
-  public String toString() {
-    return "Output3(superNested1=" + this.getSuperNested1() + ", superNested2=" + this.getSuperNested2() + ", superOuterVariable=" + this.getSuperOuterVariable() + ")";
-  }
-
   public static abstract class Output3Builder<C extends Output3, B extends Output3Builder<C, B>> extends BaseEntityBuilder<C, B> {
     private String superNested1;
     private String superNested2;
     private String superOuterVariable;
+    private AnotherObject anotherObject;
 
     public B superNested1(String superNested1) {
       this.superNested1 = superNested1;
@@ -105,13 +111,15 @@ public class Output3 extends BaseEntity{
       return self();
     }
 
+    public B anotherObject(AnotherObject anotherObject) {
+      this.anotherObject = anotherObject;
+      return self();
+    }
+
     protected abstract B self();
 
     public abstract C build();
 
-    public String toString() {
-      return "Output3.Output3Builder(super=" + super.toString() + ", superNested1=" + this.superNested1 + ", superNested2=" + this.superNested2 + ", superOuterVariable=" + this.superOuterVariable + ")";
-    }
   }
 
   private static final class Output3BuilderImpl extends Output3Builder<Output3, Output3BuilderImpl> {

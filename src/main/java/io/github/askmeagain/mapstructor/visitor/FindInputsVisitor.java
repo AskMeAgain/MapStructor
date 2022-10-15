@@ -1,6 +1,8 @@
 package io.github.askmeagain.mapstructor.visitor;
 
 import com.intellij.psi.*;
+import com.intellij.psi.impl.source.PsiParameterImpl;
+import com.intellij.psi.impl.source.tree.java.PsiLocalVariableImpl;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -15,10 +17,22 @@ public class FindInputsVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitReferenceExpression(PsiReferenceExpression expression) {
+    super.visitReferenceExpression(expression);
     if (expression.getParent() instanceof PsiMethodCallExpression) {
-    } else {
-      found.add(expression);
+      return;
     }
+
+    var resolve = expression.resolve();
+
+    var isLocalVar = resolve instanceof PsiLocalVariableImpl;
+    var isParameter = resolve instanceof PsiParameterImpl;
+
+    if (!isLocalVar && !isParameter) {
+      return;
+    }
+
+    found.add(expression);
+
   }
 
   public static List<PsiReferenceExpression> find(PsiElement element) {
