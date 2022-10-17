@@ -8,7 +8,12 @@ import lombok.EqualsAndHashCode;
 import lombok.With;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
@@ -21,6 +26,8 @@ public class MapstructMethodEntity {
 
   @EqualsAndHashCode.Include
   private PsiType outputType;
+
+  private final Set<String> innerMethodBody;
 
   @Builder.Default
   private Set<VariableWithNameEntity> inputs = new HashSet<>();

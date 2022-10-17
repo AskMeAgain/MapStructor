@@ -2,27 +2,35 @@ package io.github.askmeagain.mapstructor.services;
 
 import com.intellij.psi.PsiClassOwner;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiLocalVariable;
 import io.github.askmeagain.mapstructor.entities.BasicMapping;
 import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
 import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
 import io.github.askmeagain.mapstructor.iteration.*;
+import io.github.askmeagain.mapstructor.visitor.FindInnerMethodBodyVisitor;
 import io.github.askmeagain.mapstructor.visitor.FindMainMethodVisitor;
 import io.github.askmeagain.mapstructor.visitor.MappingVisitor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MapstructorService {
 
   private final PsiFile psiFile;
-  private final List<Iteration> iterations;
+  private List<Iteration> iterations;
 
   public MapstructorService(PsiFile psiFile) {
     this.psiFile = psiFile;
-    this.iterations = List.of(
+  }
+
+  @NotNull
+  private static List<Iteration> getIterations(PsiFile psiFile, Set<PsiLocalVariable> innerMethodBodies) {
+    return List.of(
         new CalcInputIteration(),
         new RefMappingIteration(),
-        new ExternalMethodIteration(psiFile),
+        new ExternalMethodIteration(psiFile, innerMethodBodies),
         new MainMethodIteration()
     );
   }
@@ -30,6 +38,10 @@ public class MapstructorService {
   public MapStructMapperEntity calculate(int start, int end) {
 
     var straightMappingList = MappingVisitor.find(psiFile, start, end);
+    var innerMethodBodies = FindInnerMethodBodyVisitor.find(psiFile, start, end);
+
+    this.iterations = getIterations(psiFile, innerMethodBodies);
+
 
     var dividedByParent = straightMappingList.stream()
         .collect(Collectors.groupingBy(BasicMapping::getParent));
@@ -37,6 +49,7 @@ public class MapstructorService {
     var result = dividedByParent.entrySet()
         .stream()
         .map(mappingByType -> MapstructMethodEntity.builder()
+            .innerMethodBody(innerMethodBodies.stream().map(PsiLocalVariable::getName).collect(Collectors.toSet()))
             .outputType(mappingByType.getKey())
             .mappings(mappingByType.getValue()
                 .stream()

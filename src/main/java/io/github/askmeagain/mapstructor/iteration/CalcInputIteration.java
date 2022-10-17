@@ -22,7 +22,7 @@ public class CalcInputIteration implements Iteration {
           .filter(Objects::nonNull)
           .flatMap(Collection::stream)
           .map(x -> VariableWithNameEntity.builder()
-              .name(x)
+              .name(x.getText())
               .type(x.getType())
               .build())
           .collect(Collectors.toList());

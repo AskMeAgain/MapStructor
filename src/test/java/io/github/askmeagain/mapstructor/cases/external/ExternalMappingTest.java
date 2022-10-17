@@ -29,7 +29,7 @@ public class ExternalMappingTest extends AbstractTestBase {
     output2.setNested1("1" + (2 * 3) + "3" + abc);
     output2.setNested2(ExternalMappingTest.methodWithNoInput());
 
-    output.setInput1(ExternalMappingTest.thisIsAMethod(abc));
+    output.setInput1(ExternalMappingTest.thisIsAMethod(abc + " LOL"));
     output.setNestedThings(output2);
 
     return output;

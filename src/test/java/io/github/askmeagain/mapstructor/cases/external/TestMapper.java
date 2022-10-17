@@ -22,7 +22,7 @@ public interface TestMapper {
 
   @Named("mapInput1")
   default String mapInput1(String abc) {
-    return ExternalMappingTest.thisIsAMethod(abc);
+    return ExternalMappingTest.thisIsAMethod(abc + " LOL");
   }
 
   @Named("mapNested1")

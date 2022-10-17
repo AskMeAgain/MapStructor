@@ -1,6 +1,12 @@
 package io.github.askmeagain.mapstructor.iteration;
 
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiLocalVariable;
+import com.intellij.psi.PsiMethodCallExpression;
+import com.intellij.psi.PsiPolyadicExpression;
+import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.psi.PsiType;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.askmeagain.mapstructor.entities.MapStructMapperEntity;
 import io.github.askmeagain.mapstructor.entities.MapstructExternalMethodEntity;
@@ -20,6 +26,7 @@ import static io.github.askmeagain.mapstructor.services.MapstructorUtils.getMeth
 public class ExternalMethodIteration implements Iteration {
 
   private final PsiFile psiFile;
+  private final Set<PsiLocalVariable> innerMethodBodies;
 
   @Override
   public void accept(MapStructMapperEntity entity) {
@@ -79,9 +86,8 @@ public class ExternalMethodIteration implements Iteration {
     mapping.setExternalMethod(true);
     mapping.setExternalMethodEntity(externalMethod);
 
-    var methodRef = PsiTreeUtil.getChildOfType(mapping.getSource(), PsiMethodCallExpression.class);
-
     //needs to be static import
+    var methodRef = PsiTreeUtil.getChildOfType(mapping.getSource(), PsiMethodCallExpression.class);
     if (methodRef != null && !methodRef.getText().contains(".")) {
       var m1 = FindMethodCallExpressionVisitor.find(methodRef, psiFile);
       var parent = PsiTreeUtil.getParentOfType(m1, PsiClass.class);
@@ -94,7 +100,7 @@ public class ExternalMethodIteration implements Iteration {
         .stream()
         .map(x -> VariableWithNameEntity.builder()
             .type(x.getType())
-            .name(x)
+            .name(x.getText())
             .build())
         .collect(Collectors.toSet());
   }

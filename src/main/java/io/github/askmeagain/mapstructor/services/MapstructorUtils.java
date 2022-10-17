@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class MapstructorUtils {
 
   public static String printVariableWithName(VariableWithNameEntity variableWithNameEntity) {
-    return variableWithNameEntity.getType().getPresentableText() + " " + variableWithNameEntity.getName().getText();
+    return variableWithNameEntity.getType().getPresentableText() + " " + variableWithNameEntity.getName();
   }
 
   public static String toPascalCase(String str) {

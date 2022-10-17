@@ -31,6 +31,11 @@ public class FindInputsVisitor extends JavaRecursiveElementVisitor {
       return;
     }
 
+    var isLambdaParameter = expression.getType().getPresentableText().contains("<lambda parameter>");
+    if (isLambdaParameter) {
+      return;
+    }
+
     found.add(expression);
 
   }

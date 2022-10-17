@@ -3,6 +3,7 @@ package io.github.askmeagain.mapstructor.printer;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
+import io.github.askmeagain.mapstructor.entities.VariableWithNameEntity;
 import io.github.askmeagain.mapstructor.services.MapstructorUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -33,13 +34,13 @@ public class MapstructMappingPrinter {
         hasSource = true;
         hasExpression = false;
         sourceText = inputs.stream()
-            .map(x -> x.getName().getText())
+            .map(VariableWithNameEntity::getName)
             .collect(Collectors.joining(""));
       } else {
         hasSource = false;
         hasExpression = true;
         expressionText = "map" + mapping.getRefToOtherMapping().getOutputType().getPresentableText() + "(" + inputs.stream()
-            .map(x -> x.getName().getText())
+            .map(VariableWithNameEntity::getName)
             .collect(Collectors.joining(", ")) + ")";
       }
     }
@@ -57,13 +58,13 @@ public class MapstructMappingPrinter {
       } else if (inputParams.size() == 1) {
         qualifiedText = ", qualifiedByName = \"" + methodName + "\"";
         sourceText = inputParams.stream()
-            .map(x -> x.getName().getText())
+            .map(VariableWithNameEntity::getName)
             .collect(Collectors.joining(", "));
       } else {
         hasSource = false;
         hasExpression = true;
         expressionText = methodName + "(" + inputParams.stream()
-            .map(x -> x.getName().getText())
+            .map(VariableWithNameEntity::getName)
             .collect(Collectors.joining(", ")) + ")";
       }
     }

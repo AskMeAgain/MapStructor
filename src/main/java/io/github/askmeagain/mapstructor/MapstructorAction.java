@@ -5,7 +5,6 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.psi.PsiElement;
 import groovy.util.logging.Slf4j;
 import io.github.askmeagain.mapstructor.entities.MapperConfig;
 import io.github.askmeagain.mapstructor.entities.MapstructMethodEntity;
@@ -84,7 +83,6 @@ public class MapstructorAction extends AnAction {
               .replace("$PARAMS", mainMethod.calculateDeepInputs()
                   .stream()
                   .map(VariableWithNameEntity::getName)
-                  .map(PsiElement::getText)
                   .collect(Collectors.joining(", ")));
 
           document.insertString(selectionStart, mapCall);
