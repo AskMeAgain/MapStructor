@@ -1,7 +1,16 @@
-void $TEST_NAME(){
-    var expected = $EXPECTED_VALUE
-    var mapper = Mappers.getMapper($MAPPER_NAME.class);
-    var result = mapper.$MAIN_NAME($PARAMS);
+$PACKAGE_NAME
 
-    assertEquals(result,expected);
+$IMPORTS
+
+class $MAPPER_NAMETest() {
+
+    @Test
+    void $TEST_NAME(){
+        var expected = $EXPECTED_VALUE
+        var mapper = Mappers.getMapper($MAPPER_NAME.class);
+        var result = mapper.$MAIN_NAME($PARAMS);
+
+        assertEquals(result,expected);
+    }
 }
+
