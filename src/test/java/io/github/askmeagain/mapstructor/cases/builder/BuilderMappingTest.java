@@ -1,6 +1,6 @@
 package io.github.askmeagain.mapstructor.cases.builder;
 
-import io.github.askmeagain.mapstructor.common.AbstractTestBase;
+import io.github.askmeagain.mapstructor.common.AbstractMapperTestBase;
 import io.github.askmeagain.mapstructor.entities.Output1;
 import io.github.askmeagain.mapstructor.entities.Output2;
 import io.github.askmeagain.mapstructor.entities.Output3;
@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BuilderMappingTest extends AbstractTestBase {
+public class BuilderMappingTest extends AbstractMapperTestBase {
 
   @ParameterizedTest
   @CsvSource({"abc,def", "def,zyx"})

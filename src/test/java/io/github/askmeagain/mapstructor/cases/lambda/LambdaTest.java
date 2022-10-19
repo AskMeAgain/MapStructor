@@ -1,6 +1,6 @@
 package io.github.askmeagain.mapstructor.cases.lambda;
 
-import io.github.askmeagain.mapstructor.common.AbstractTestBase;
+import io.github.askmeagain.mapstructor.common.AbstractMapperTestBase;
 import io.github.askmeagain.mapstructor.entities.AnotherObject;
 import io.github.askmeagain.mapstructor.entities.Optional;
 import io.github.askmeagain.mapstructor.entities.Output1;
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LambdaTest extends AbstractTestBase {
+public class LambdaTest extends AbstractMapperTestBase {
 
   @Test
   void mappingTest() {

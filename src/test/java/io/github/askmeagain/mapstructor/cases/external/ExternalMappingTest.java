@@ -1,6 +1,6 @@
 package io.github.askmeagain.mapstructor.cases.external;
 
-import io.github.askmeagain.mapstructor.common.AbstractTestBase;
+import io.github.askmeagain.mapstructor.common.AbstractMapperTestBase;
 import io.github.askmeagain.mapstructor.entities.Output1;
 import io.github.askmeagain.mapstructor.entities.Output2;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ExternalMappingTest extends AbstractTestBase {
+public class ExternalMappingTest extends AbstractMapperTestBase {
 
   @ParameterizedTest
   @CsvSource({"abc", "def"})

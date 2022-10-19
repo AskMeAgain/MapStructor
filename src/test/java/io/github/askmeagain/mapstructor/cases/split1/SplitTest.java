@@ -1,6 +1,6 @@
 package io.github.askmeagain.mapstructor.cases.split1;
 
-import io.github.askmeagain.mapstructor.common.AbstractTestBase;
+import io.github.askmeagain.mapstructor.common.AbstractMapperTestBase;
 import io.github.askmeagain.mapstructor.entities.MapperConfig;
 import io.github.askmeagain.mapstructor.entities.Output1;
 import io.github.askmeagain.mapstructor.entities.Output2;
@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SplitTest extends AbstractTestBase {
+public class SplitTest extends AbstractMapperTestBase {
 
   @ParameterizedTest
   @CsvSource({

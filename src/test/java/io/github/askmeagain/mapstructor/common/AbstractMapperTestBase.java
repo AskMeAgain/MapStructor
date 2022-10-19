@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class AbstractTestBase extends LightJavaCodeInsightFixtureTestCase {
+public abstract class AbstractMapperTestBase extends LightJavaCodeInsightFixtureTestCase {
 
   private static final String mapstructorAction = "io.github.askmeagain.mapstructor.MapstructorAction";
 

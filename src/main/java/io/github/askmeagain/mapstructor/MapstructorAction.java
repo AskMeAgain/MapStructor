@@ -12,10 +12,16 @@ import io.github.askmeagain.mapstructor.entities.VariableWithNameEntity;
 import io.github.askmeagain.mapstructor.gui.MapperNameDialog;
 import io.github.askmeagain.mapstructor.printer.MapstructMapperPrinter;
 import io.github.askmeagain.mapstructor.services.MapstructorService;
+import io.github.askmeagain.mapstructor.services.MapstructorTestGeneratorService;
 import io.github.askmeagain.mapstructor.services.MapstructorUtils;
+import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -52,18 +58,34 @@ public class MapstructorAction extends AnAction {
 
       var afterConfigResult = preConfigResult.withMapperConfig(mapperConfig);
 
-      for (var mappers : MapstructorUtils.splitByConfig(afterConfigResult)) {
-        var printResult = MapstructMapperPrinter.print(mappers);
+      for (var mapStructMapperEntity : MapstructorUtils.splitByConfig(afterConfigResult)) {
+        var printResult = MapstructMapperPrinter.print(mapStructMapperEntity);
 
         WriteCommandAction.runWriteCommandAction(project, () -> {
           try {
             data.getParent()
-                .createChildData(null, mappers.getMapperConfig().getMapperName() + ".java")
+                .createChildData(null, mapStructMapperEntity.getMapperConfig().getMapperName() + ".java")
                 .setBinaryContent(printResult.getBytes(StandardCharsets.UTF_8));
           } catch (Exception ex) {
             throw new RuntimeException("Cannot create mapper.", ex);
           }
         });
+
+        if (mapperConfig.isGenerateTest()) {
+          try {
+            var testGenerator = new MapstructorTestGeneratorService(mapStructMapperEntity);
+            var testString = testGenerator.generateTest();
+            var path = Path.of(data.getCanonicalPath())
+                .resolveSibling(mapperConfig.getMapperName() + "Test.java")
+                .toString()
+                .replace("/main/", "/test/");
+
+            FileUtils.writeStringToFile(new File(path), testString, Charset.defaultCharset());
+
+          } catch (IOException ex) {
+            throw new RuntimeException("Cannot create test.", ex);
+          }
+        }
       }
 
       if (afterConfigResult.getMapperConfig().isReplaceWithInit()) {

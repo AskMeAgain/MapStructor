@@ -1,13 +1,13 @@
 package io.github.askmeagain.mapstructor.cases.staticimport;
 
-import io.github.askmeagain.mapstructor.common.AbstractTestBase;
+import io.github.askmeagain.mapstructor.common.AbstractMapperTestBase;
 import io.github.askmeagain.mapstructor.entities.Output1;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class StaticImportTest extends AbstractTestBase {
+public class StaticImportTest extends AbstractMapperTestBase {
 
   @ParameterizedTest
   @CsvSource({"abc", "def"})

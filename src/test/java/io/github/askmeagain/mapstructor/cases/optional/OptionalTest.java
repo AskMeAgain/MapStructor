@@ -1,6 +1,6 @@
 package io.github.askmeagain.mapstructor.cases.optional;
 
-import io.github.askmeagain.mapstructor.common.AbstractTestBase;
+import io.github.askmeagain.mapstructor.common.AbstractMapperTestBase;
 import io.github.askmeagain.mapstructor.entities.Optional;
 import io.github.askmeagain.mapstructor.entities.Output1;
 import io.github.askmeagain.mapstructor.entities.Output2;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class OptionalTest extends AbstractTestBase {
+public class OptionalTest extends AbstractMapperTestBase {
 
   @Test
   void mappingTest() {
