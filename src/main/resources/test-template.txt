@@ -8,6 +8,7 @@ class $MAPPER_NAMETest() {
     void $TEST_NAME(){
         var expected = $EXPECTED_VALUE
         var mapper = Mappers.getMapper($MAPPER_NAME.class);
+        $INIT_PARAMS
         var result = mapper.$MAIN_NAME($PARAMS);
 
         assertEquals(result,expected);

@@ -32,11 +32,15 @@ public class MapstructorTestGeneratorService {
     return template.replace("$PACKAGE_NAME", mapStructMapperEntity.getPackageName())
         .replace("$IMPORTS", MapstructImportPrinter.print(mapStructMapperEntity))
         .replace("$MAPPER_NAME", mapStructMapperEntity.getMapperConfig().getMapperName())
-        .replace("$TEST_NAME", mainMethod.getOutputType().getPresentableText())
+        .replace("$TEST_NAME", "testMap" + mainMethod.getOutputType().getPresentableText())
+        .replace("$MAIN_NAME", "map" + mainMethod.getOutputType().getPresentableText())
         .replace("$PARAMS", mainMethod.getInputs()
             .stream()
             .map(VariableWithNameEntity::getName)
             .collect(Collectors.joining(", ")))
+        .replace("$INIT_PARAMS", mainMethod.getInputs().stream()
+            .map(x -> "var " + x.getName() + " = TODO;")
+            .collect(Collectors.joining("\n")))
         .replace("$EXPECTED", "TODO");
   }
 }
