@@ -1,11 +1,22 @@
-asd
-asd
-asd
-as
-s
-s
-s
-s
-s
-s
-s
+io.github.askmeagain.test.anotherTest
+
+import float;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
+
+import static long;
+
+class AbcMapperTest() {
+
+    @Test
+    void testMapfloat(){
+        var expected = null;
+        var input = TODO;
+
+        var result = Mappers.getMapper(AbcMapper.class).mapfloat(input);
+
+        assertEquals(result,expected);
+    }
+}
+

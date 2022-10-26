@@ -6,7 +6,7 @@ class $MAPPER_NAMETest() {
 
     @Test
     void $TEST_NAME(){
-        var expected = $EXPECTED_VALUE
+        var expected = null;
         $INIT_PARAMS
 
         var result = Mappers.getMapper($MAPPER_NAME.class).$MAIN_NAME($PARAMS);

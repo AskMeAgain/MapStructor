@@ -19,6 +19,7 @@ of code and executing an action.
 * Split each mapper into separate files
 * Replace selected code with mapper initialization
 * Generate interface or abstract class mapper
+* Generate a test template for this mapper automatically
 
 ## Examples
 

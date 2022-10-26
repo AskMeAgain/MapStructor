@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+//@Mapper
 public interface TestMapper {
 
   TestMapper INSTANCE = Mappers.getMapper(TestMapper.class);
@@ -24,7 +24,7 @@ public interface TestMapper {
   @Mapping(target = "superNestedObject", expression = "java(mapOutput3(optObj, anotherInput))")
   Output2 mapOutput2(Optional<Output3> optObj, String anotherInput);
 
-  default AnotherObject mapAnotherObject(Optional<Output3> optObj, String anotherInput) {
-    return optObj.map(x -> new AnotherObject(anotherInput)).orElse(new AnotherObject());
+  default Object mapAnotherObject(Optional<Output3> optObj, String anotherInput) {
+    return (Object)optObj.map(x -> new AnotherObject(anotherInput)).orElse(new AnotherObject());
   }
 }
