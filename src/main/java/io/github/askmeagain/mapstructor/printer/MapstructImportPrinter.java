@@ -31,6 +31,11 @@ public class MapstructImportPrinter {
         .map(MapstructMethodEntity::getOutputType)
         .map(PsiType::getCanonicalText);
 
+    var externalOutputs = entity.getExternalMethodEntities()
+        .stream()
+        .map(MapstructExternalMethodEntity::getOutputType)
+        .map(PsiType::getCanonicalText);
+
     var collectedImportStream = entity.getMappings().stream()
         .map(MapstructMethodEntity::calculateDeepInputs)
         .flatMap(Collection::stream)
@@ -39,7 +44,7 @@ public class MapstructImportPrinter {
         .map(MapstructImportPrinter::splitGeneric)
         .flatMap(Collection::stream);
 
-    var normalImports = Stream.of(stream, collectedImportStream, another, stringStream)
+    var normalImports = Stream.of(stream, collectedImportStream, another, stringStream, externalOutputs)
         .flatMap(Function.identity())
         .distinct()
         .filter(x -> !x.startsWith("java.lang"))

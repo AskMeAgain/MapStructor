@@ -1,6 +1,9 @@
-$PACKAGE_NAME
+package $PACKAGE_NAME;
 
+import org.junit.Test;
+import $PACKAGE_NAME.$MAPPER_NAME;
 $IMPORTS
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class $MAPPER_NAMETest() {
 

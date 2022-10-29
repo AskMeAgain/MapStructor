@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -14,6 +15,14 @@ public class FindInputsVisitor extends JavaRecursiveElementVisitor {
 
   @Getter
   private final List<PsiReferenceExpression> found = new ArrayList<>();
+  @Getter
+  private final List<PsiParameter> lambdaParameters = new ArrayList<>();
+
+  @Override
+  public void visitLambdaExpression(PsiLambdaExpression expression) {
+    lambdaParameters.addAll(Arrays.asList(expression.getParameterList().getParameters()));
+  }
+
 
   @Override
   public void visitReferenceExpression(PsiReferenceExpression expression) {
@@ -43,7 +52,12 @@ public class FindInputsVisitor extends JavaRecursiveElementVisitor {
   public static List<PsiReferenceExpression> find(PsiElement element) {
     var instance = new FindInputsVisitor();
     element.accept(instance);
-    return instance.getFound();
+    var found = instance.getFound();
+    //remove lambda parameters
+
+    instance.getLambdaParameters().forEach(x -> found.removeIf(y -> y.getText().equals(x.getName())));
+
+    return found;
   }
 
 }

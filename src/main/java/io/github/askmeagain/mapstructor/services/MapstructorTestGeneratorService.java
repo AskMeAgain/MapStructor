@@ -29,8 +29,10 @@ public class MapstructorTestGeneratorService {
         .findFirst()
         .orElseThrow();
 
+    var imports = MapstructImportPrinter.print(mapStructMapperEntity);
+
     return template.replace("$PACKAGE_NAME", mapStructMapperEntity.getPackageName())
-        .replace("$IMPORTS", MapstructImportPrinter.print(mapStructMapperEntity))
+        .replace("$IMPORTS", imports)
         .replace("$MAPPER_NAME", mapStructMapperEntity.getMapperConfig().getMapperName())
         .replace("$TEST_NAME", "testMap" + mainMethod.getOutputType().getPresentableText())
         .replace("$MAIN_NAME", "map" + mainMethod.getOutputType().getPresentableText())

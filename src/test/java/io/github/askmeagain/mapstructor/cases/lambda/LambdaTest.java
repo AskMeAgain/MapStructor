@@ -6,7 +6,6 @@ import io.github.askmeagain.mapstructor.entities.Optional;
 import io.github.askmeagain.mapstructor.entities.Output1;
 import io.github.askmeagain.mapstructor.entities.Output2;
 import io.github.askmeagain.mapstructor.entities.Output3;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,7 +13,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LambdaTest extends AbstractMapperTestBase {
 
   @Test
-  @Disabled("todo enable")
   void mappingTest() {
     var output = mappingResult(Optional.of(new Output3()), "whatever");
     var result = TestMapper.INSTANCE.mapOutput1(Optional.of(new Output3()), "whatever");

@@ -1,11 +1,14 @@
-io.github.askmeagain.test.anotherTest
+package io.github.askmeagain.test.anotherTest;
 
+import org.junit.Test;
+import io.github.askmeagain.test.anotherTest.AbcMapper;
 import float;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import static long;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AbcMapperTest() {
 

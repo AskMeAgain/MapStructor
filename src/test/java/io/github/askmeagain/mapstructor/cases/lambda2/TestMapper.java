@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
-//@Mapper
+@Mapper
 public interface TestMapper {
 
   TestMapper INSTANCE = Mappers.getMapper(TestMapper.class);
@@ -26,7 +26,7 @@ public interface TestMapper {
   Output2 mapOutput2(Optional<Output3> optObj);
 
   @Named("mapAnotherObject")
-  default Object mapAnotherObject(Optional<Output3> optObj) {
+  default AnotherObject mapAnotherObject(Optional<Output3> optObj) {
     return optObj.map(x -> new AnotherObject(x.toString())).orElse(new AnotherObject());
   }
 }
