@@ -8,9 +8,23 @@ import io.github.askmeagain.mapstructor.entities.Output2;
 import io.github.askmeagain.mapstructor.entities.Output3;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LambdaTest extends AbstractMapperTestBase {
+
+  @Override
+  protected List<String> removeLines() {
+    return List.of("import io.github.askmeagain.mapstructor.entities.AnotherObject;");
+  }
+
+  @Override
+  protected Map<String, String> replaceResult() {
+    return Map.of(" AnotherObject ", " Object ");
+  }
+
 
   @Test
   void mappingTest() {

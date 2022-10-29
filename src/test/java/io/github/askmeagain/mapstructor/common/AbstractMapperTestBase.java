@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public abstract class AbstractMapperTestBase extends LightJavaCodeInsightFixtureTestCase {
@@ -31,6 +32,14 @@ public abstract class AbstractMapperTestBase extends LightJavaCodeInsightFixture
     } finally {
       super.tearDown();
     }
+  }
+
+  protected List<String> removeLines() {
+    return Collections.emptyList();
+  }
+
+  protected Map<String, String> replaceResult() {
+    return Collections.emptyMap();
   }
 
   protected String setMappingReplacement() {
@@ -77,12 +86,20 @@ public abstract class AbstractMapperTestBase extends LightJavaCodeInsightFixture
         packageName + entitiesDir + "Output3.java"
     );
 
+    var linesToBeRemoved = removeLines();
+    var replacedMapper = Files.readAllLines(Path.of(packageName + "/" + MapstructorAction.DEFAULT_TEST_CONFIG.getMapperName() + ".java")).stream()
+        .filter(x -> !linesToBeRemoved.contains(x))
+        .collect(Collectors.joining("\n"));
+    var replacedMapperResult = replaceResult().entrySet()
+        .stream()
+        .reduce(replacedMapper, (old, kv) -> old.replace(kv.getKey(), kv.getValue()), (o, n) -> n);
+
     myFixture.performEditorAction(mapstructorAction);
 
     //both files have same path, but are not in the same project
-    myFixture.checkResultByFile(
+    myFixture.checkResult(
         packageName + "/" + MapstructorAction.DEFAULT_TEST_CONFIG.getMapperName() + ".java",
-        packageName + "/" + MapstructorAction.DEFAULT_TEST_CONFIG.getMapperName() + ".java",
+        replacedMapperResult,
         false
     );
 
