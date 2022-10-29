@@ -20,6 +20,7 @@ public class FindInputsVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitLambdaExpression(PsiLambdaExpression expression) {
+    super.visitLambdaExpression(expression);
     lambdaParameters.addAll(Arrays.asList(expression.getParameterList().getParameters()));
   }
 
